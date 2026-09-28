@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Caderno de Campo — Insetos de João Pessoa & Conde</title>
+<title>Catálogo Taxonômico — Entomofauna de João Pessoa & Conde (PB)</title>
 <style>
   :root{
     --moss-deep: #223526;
@@ -119,6 +119,44 @@
     color: var(--ink);
   }
 
+  .fetch-all-btn{
+    display:block;
+    width:100%;
+    font-size: 14px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    border: 1.5px solid var(--ochre);
+    border-radius: 8px;
+    background: #f3e8cf;
+    color: var(--ochre-deep);
+    font-weight:bold;
+    cursor:pointer;
+  }
+  .fetch-all-btn:hover{ background:#ecdcb4; }
+  .fetch-all-btn:disabled{ opacity:.6; cursor:default; }
+  .fetch-all-progress{
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    text-align:center;
+    margin: -6px 0 12px;
+  }
+
+  .network-banner{
+    max-width: 720px; margin: 0 auto;
+    background: #f7e4d6;
+    border-bottom: 2px solid var(--stamp-red);
+    color: #5a2a1a;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 12px 16px;
+  }
+  .network-banner code{
+    background: rgba(0,0,0,0.08);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 11.5px;
+  }
+
   .order-section{ margin-bottom: 14px; border: 1.5px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--paper); }
   .order-header{
     display:flex; align-items:center; gap: 12px;
@@ -129,8 +167,8 @@
     border-left: 8px solid var(--order-color, var(--moss));
   }
   .order-header:hover{ background: #fffef9; }
-  .order-name{ font-size: 18px; font-weight: 600; margin:0; }
-  .order-sci{ font-style: italic; color: var(--ink-soft); font-size: 13px; margin: 2px 0 0; }
+  .order-name{ font-size: 12.5px; font-weight: 500; margin:0 0 2px; color: var(--ink-soft); text-transform:uppercase; letter-spacing:.02em; }
+  .order-sci{ font-style: italic; font-weight:600; font-size: 18px; margin: 0; color: var(--ink); }
   .order-count{
     margin-left:auto;
     font-family: 'Courier New', monospace;
@@ -183,7 +221,21 @@
   .photo-fallback{
     font-size: 34px;
     opacity: .55;
+    display:flex; flex-direction:column; align-items:center; gap:6px;
   }
+  .photo-fallback-label{ font-size: 10.5px; color: var(--ink-soft); }
+  .photo-retry{
+    position:absolute; bottom:6px; right:6px;
+    font-family:'Courier New', monospace;
+    font-size: 10px;
+    background: rgba(255,255,255,0.85);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 2px 6px;
+    cursor: pointer;
+    color: var(--ink-soft);
+  }
+  .photo-retry:hover{ background:#fff; }
   .stamp{
     position:absolute; top:8px; right:8px;
     background: var(--stamp-red);
@@ -198,8 +250,8 @@
     border: 1px solid rgba(255,255,255,.4);
   }
   .card-body{ padding: 10px 12px 12px; display:flex; flex-direction:column; gap:5px; flex:1; }
-  .family-common{ font-weight: 600; font-size: 15px; margin:0; }
-  .family-sci{ font-style: italic; color: var(--ink-soft); font-size: 13px; margin:0; }
+  .family-common{ font-size: 11.5px; font-weight:500; color: var(--ink-soft); text-transform:uppercase; letter-spacing:.02em; margin:0 0 2px; }
+  .family-sci{ font-style: italic; font-weight:600; color: var(--ink); font-size: 16px; margin:0; }
   .family-env{
     font-family: 'Courier New', monospace;
     font-size: 11px;
@@ -260,6 +312,86 @@
   }
   .catch-label{ font-size: 13.5px; color: var(--ink); cursor:pointer; }
 
+  .details-toggle{
+    margin-top: 8px;
+    align-self: flex-start;
+    background: none;
+    border: none;
+    padding: 2px 0;
+    font-size: 12.5px;
+    color: var(--ochre-deep);
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .details-toggle:hover{ text-decoration: underline; }
+
+  .details-panel{
+    margin-top: 6px;
+    border-top: 1px dashed var(--line);
+    padding-top: 8px;
+  }
+  .details-tabbar{
+    display:flex;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+  .details-tab{
+    flex:1;
+    font-size: 11.5px;
+    padding: 6px 4px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: #f2ede0;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .details-tab.active{
+    background: var(--moss);
+    color: var(--paper);
+    border-color: var(--moss);
+    font-weight: bold;
+  }
+  .details-content{
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .details-content p{ margin: 0 0 8px; }
+  .chave-label{
+    font-family:'Courier New', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing:.03em;
+    color: var(--ochre-deep);
+    margin: 10px 0 3px !important;
+  }
+  .chave-label:first-of-type{ margin-top:0 !important; }
+  .chave-img{
+    width:100%;
+    aspect-ratio: 16/9;
+    background:#ece4cc;
+    border-radius:6px;
+    overflow:hidden;
+    margin-bottom:8px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .chave-img img{ width:100%; height:100%; object-fit:cover; display:none; }
+  .chave-img img[src]:not([src=""]){ display:block; }
+  .chave-disclaimer{
+    font-size: 11px;
+    color: var(--ink-soft);
+    border-top: 1px dashed var(--line);
+    padding-top: 8px;
+    margin-top: 10px !important;
+  }
+  .chave-fonte{
+    font-size: 11px;
+    color: var(--ochre-deep);
+    border-top: 1px solid var(--ochre);
+    padding-top: 8px;
+    margin-top: 10px !important;
+  }
+
   .no-results{
     text-align:center; padding: 40px 20px; color: var(--ink-soft); font-size:15px;
   }
@@ -274,110 +406,247 @@
 
 <header class="hero">
   <div class="hero-inner">
-    <p class="kicker sans">CADERNO DE CAMPO · ENTOMOLOGIA</p>
-    <h1>Insetos de João Pessoa &amp; Conde</h1>
-    <p class="subtitle sans">Catálogo por ordem e família das principais linhagens de insetos encontráveis na Mata Atlântica costeira, restinga, mangue e áreas urbanas da região. Marque o que você já capturou ou fotografou.</p>
+    <p class="kicker sans">CATÁLOGO TAXONÔMICO · CLASSE INSECTA</p>
+    <h1>Entomofauna de João Pessoa &amp; Conde (PB)</h1>
+    <p class="subtitle sans">Chave de referência por Ordem e Família dos principais táxons de Insecta registrados na Mata Atlântica costeira, restinga, ecossistema manguezal e matriz antrópica da região. Registre os táxons já coletados/observados.</p>
   </div>
   <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
-  <div class="progress-label sans"><span id="progressText">0 / 0 famílias</span><span id="progressPct">0%</span></div>
+  <div class="progress-label sans"><span id="progressText">0 / 0 táxons</span><span id="progressPct">0%</span></div>
   <div class="progress-label sans" style="margin-top:4px;"><span id="scoreText">0 pontos</span><span id="scoreMax"></span></div>
 </header>
 
+<div id="networkBanner" class="network-banner sans" style="display:none;"></div>
+
 <main>
   <div class="filter-row">
-    <input type="text" class="search-input" id="searchInput" placeholder="Buscar família ou nome popular…">
+    <input type="text" class="search-input" id="searchInput" placeholder="Consultar por família, epíteto científico ou nome vulgar…">
     <select class="filter-select" id="filterSelect">
-      <option value="todas">Todas</option>
-      <option value="capturadas">Capturadas</option>
-      <option value="faltando">Faltando</option>
+      <option value="todas">Todos os táxons</option>
+      <option value="capturadas">Registrados</option>
+      <option value="faltando">Não registrados</option>
     </select>
   </div>
+  <button class="fetch-all-btn sans" id="fetchAllBtn">Recuperar registros fotográficos de todos os táxons</button>
+  <div class="fetch-all-progress sans" id="fetchAllProgress" style="display:none;"></div>
   <div id="ordersContainer"></div>
   <div class="no-results sans" id="noResults" style="display:none;">Nenhuma família encontrada com esse filtro.</div>
 </main>
 
-<footer>caderno-de-campo · progresso salvo neste navegador</footer>
+<footer>catalogo-taxonomico · registros persistidos localmente (localStorage)</footer>
 
 <script>
 const STORAGE_KEY = 'catalogo-insetos-jp-conde-v1';
 
 const DATA = [
-  { id:'lepidoptera', nome:'Borboletas e mariposas', sci:'Lepidoptera', cor:'#8f6420', familias:[
-    { id:'nymphalidae', nome:'Borboletas-do-broto (patas-de-escova)', sci:'Nymphalidae', rar:1, peri:1, dif:2, amb:'mata, restinga, jardim', nota:'Grupo mais numeroso de borboletas da região; inclui as coloridas Heliconius, comuns na Mata do Buraquinho.' },
-    { id:'papilionidae', nome:'Borboletas-rabo-de-andorinha', sci:'Papilionidae', rar:2, peri:1, dif:3, amb:'mata, jardim', nota:'Borboletas grandes, muitas com prolongamentos nas asas traseiras; lagartas costumam se alimentar de citros.' },
-    { id:'pieridae', nome:'Borboletas-brancas-e-amarelas', sci:'Pieridae', rar:1, peri:1, dif:2, amb:'jardim, restinga, área aberta', nota:'Borboletas de voo baixo e constante, comuns sobrevoando quintais e terrenos baldios.' },
-    { id:'hesperiidae', nome:'Borboletas-saltadoras', sci:'Hesperiidae', rar:2, peri:1, dif:3, amb:'jardim, borda de mata', nota:'Corpo robusto e voo rápido e "saltado"; muitas vezes confundidas com mariposas pequenas.' },
-    { id:'lycaenidae', nome:'Borboletas-azuis', sci:'Lycaenidae', rar:2, peri:1, dif:2, amb:'jardim, restinga', nota:'Borboletas pequenas, muitas com reflexo azul-metálico nas asas; pousam com as asas fechadas.' },
-    { id:'riodinidae', nome:'Borboletas-metálicas', sci:'Riodinidae', rar:3, peri:1, dif:3, amb:'mata', nota:'Família rica em espécies na Mata Atlântica, com manchas metálicas características nas asas.' },
-    { id:'sphingidae', nome:'Mariposas-gaviões', sci:'Sphingidae', rar:3, peri:1, dif:4, amb:'jardim, mata (noturna)', nota:'Voam pairando como beija-flores para se alimentar de néctar; atraídas por luz à noite.' },
-    { id:'saturniidae', nome:'Mariposas-imperadoras', sci:'Saturniidae', rar:3, peri:4, dif:3, amb:'mata, área urbana (noturna)', nota:'Mariposas grandes, muitas com manchas em formato de olho nas asas; atraídas por luz à noite.' },
-    { id:'erebidae', nome:'Mariposas-tigre e falenas', sci:'Erebidae', rar:2, peri:3, dif:2, amb:'jardim, mata (noturna)', nota:'Uma das famílias mais diversas de mariposas, indo de espécies pequenas a lagartas peludas conhecidas como "taturanas".' },
+  { id:'lepidoptera', nome:'Borboletas e mariposas', sci:'Lepidoptera', cor:'#8f6420', chaveOrdem:'Corpo e apêndices recobertos por escamas quitinosas de origem pilosa; aparelho bucal do tipo sifão enrolado (probóscide) na maioria dos adultos; asas anteriores e posteriores membranosas acopladas por frênulo/retináculo ou por justaposição (Rhopalocera); metamorfose holometábola, com estágio larval eruciforme.', familias:[
+    { id:'nymphalidae', nome:'Borboletas-do-broto (patas-de-escova)', sci:'Nymphalidae', rar:1, peri:1, dif:2, amb:'mata, restinga, jardim', nota:'Grupo mais numeroso de borboletas da região; inclui as coloridas Heliconius, comuns na Mata do Buraquinho.', coleta:'Use rede entomológica (puçá) em dia ensolarado, aproximando por trás e por baixo; transfira para um pote mortífero com acetato de etila sem tocar nas asas.', diferencas:'Pousa usando apenas quatro pernas funcionais (par dianteiro reduzido), diferente das demais borboletas, que usam as seis.' , livro:'Perna anterior reduzida em ambos os sexos, sem garra tarsal (exceto nas fêmeas de Libytheinae).' },
+    { id:'papilionidae', nome:'Borboletas-rabo-de-andorinha', sci:'Papilionidae', rar:2, peri:1, dif:3, amb:'mata, jardim', nota:'Borboletas grandes, muitas com prolongamentos nas asas traseiras; lagartas costumam se alimentar de citros.', coleta:'Rede entomológica em dia ensolarado próximo a flores ou poças de lama, onde os machos costumam se concentrar para \'beber\' minerais.', diferencas:'Reconhecida pelos prolongamentos em \'cauda\' nas asas traseiras, ausentes na maioria das outras famílias de borboletas.' , livro:'Garras tarsais, quando bífidas, somente as do metatarso.' },
+    { id:'pieridae', nome:'Borboletas-brancas-e-amarelas', sci:'Pieridae', rar:1, peri:1, dif:2, amb:'jardim, restinga, área aberta', nota:'Borboletas de voo baixo e constante, comuns sobrevoando quintais e terrenos baldios.', coleta:'Rede entomológica em voo baixo sobre jardins e áreas abertas ensolaradas.', diferencas:'Coloração predominantemente branca ou amarela, mais uniforme que o padrão complexo de Nymphalidae.' , livro:'Perna anterior sem epífise; todas as garras tarsais bífidas.' },
+    { id:'hesperiidae', nome:'Borboletas-saltadoras', sci:'Hesperiidae', rar:2, peri:1, dif:3, amb:'jardim, borda de mata', nota:'Corpo robusto e voo rápido e "saltado"; muitas vezes confundidas com mariposas pequenas.', coleta:'Rede entomológica com reflexo rápido — o voo é curto e \'saltado\', então a abordagem precisa ser mais ágil que com outras borboletas.', diferencas:'Corpo robusto e cabeça larga, com voo rápido e \'saltado\' que a diferencia do voo mais lento das demais borboletas.' , livro:'Asa anterior com todas as veias partindo de pontos diferentes da célula discal; massa terminal da antena com apículo curvo.' },
+    { id:'lycaenidae', nome:'Borboletas-azuis', sci:'Lycaenidae', rar:2, peri:1, dif:2, amb:'jardim, restinga', nota:'Borboletas pequenas, muitas com reflexo azul-metálico nas asas; pousam com as asas fechadas.', coleta:'Rede entomológica de malha fina próximo a flores baixas e arbustos, dado o pequeno porte.', diferencas:'Menor porte entre as borboletas da lista, com reflexo metálico azulado ausente em Pieridae.' , livro:'Coxa protorácica do macho não prolongada após sua articulação com o trocanter.' },
+    { id:'riodinidae', nome:'Borboletas-metálicas', sci:'Riodinidae', rar:3, peri:1, dif:3, amb:'mata', nota:'Família rica em espécies na Mata Atlântica, com manchas metálicas características nas asas.', coleta:'Rede entomológica na mata, observando pousos em folhas com as asas abertas.', diferencas:'Possui manchas metálicas nas asas e pousa com elas abertas, diferente do pouso fechado de Lycaenidae.' , livro:'Coxa protorácica do macho prolongada após sua articulação com o trocanter; asas tipicamente com linhas ou manchas metálicas.' },
+    { id:'sphingidae', nome:'Mariposas-gaviões', sci:'Sphingidae', rar:3, peri:1, dif:4, amb:'jardim, mata (noturna)', nota:'Voam pairando como beija-flores para se alimentar de néctar; atraídas por luz à noite.', coleta:'Mariposas noturnas respondem bem a armadilha luminosa (lençol branco iluminado à noite) ou isca de banana fermentada com melaço pendurada em galhos.', diferencas:'Corpo fusiforme e robusto com voo pairado veloz, bem diferente do voo mais lento de Saturniidae e Erebidae.' , livro:'Asa posterior com Sc+R1 quase tocando Rs na porção pós-discal.' },
+    { id:'saturniidae', nome:'Mariposas-imperadoras', sci:'Saturniidae', rar:3, peri:4, dif:3, amb:'mata, área urbana (noturna)', nota:'Mariposas grandes, muitas com manchas em formato de olho nas asas; atraídas por luz à noite.', coleta:'Mariposas noturnas respondem bem a armadilha luminosa (lençol branco iluminado à noite) ou isca de banana fermentada com melaço pendurada em galhos.', diferencas:'Grande porte, manchas oculares nas asas e antenas plumosas mais desenvolvidas que as das demais mariposas.' , livro:'Frênulo ausente (superfamília Bombycoidea).' },
+    { id:'erebidae', nome:'Mariposas-tigre e falenas', sci:'Erebidae', rar:2, peri:3, dif:2, amb:'jardim, mata (noturna)', nota:'Uma das famílias mais diversas de mariposas, indo de espécies pequenas a lagartas peludas conhecidas como "taturanas".', coleta:'Mariposas noturnas respondem bem a armadilha luminosa (lençol branco iluminado à noite) ou isca de banana fermentada com melaço pendurada em galhos.', diferencas:'Grupo muito variável, com padrões de cor mais diversos que Noctuidae, incluindo espécies de lagartas urticantes.' , livro:'Capuz timpânico pré-espiracular presente (subfamílias Arctiinae, Herminiinae); Erebidae e Noctuidae formam grupos de delimitação historicamente problemática dentro de Noctuoidea.' },
+    { id:'noctuidae', nome:'Mariposas-corujinhas', sci:'Noctuidae', rar:1, peri:1, dif:2, amb:'jardim, mata, área urbana (noturna)', nota:'Uma das famílias de mariposas mais numerosas, atraída por luzes à noite.', coleta:'Mariposas noturnas respondem bem a armadilha luminosa (lençol branco iluminado à noite) ou isca de banana fermentada com melaço pendurada em galhos.', diferencas:'Coloração discreta (cinza/marrom) e corpo mais delgado que Erebidae.' , livro:'Capuz timpânico ausente ou pós-espiracular; porção inferior da fronte revestida por escamas (várias subfamílias).' },
+    { id:'geometridae', nome:'Mariposas-mede-palmos', sci:'Geometridae', rar:2, peri:1, dif:2, amb:'mata, jardim (noturna)', nota:'Lagartas se deslocam arqueando o corpo, como se estivessem medindo palmos.', coleta:'Mariposas noturnas respondem bem a armadilha luminosa (lençol branco iluminado à noite) ou isca de banana fermentada com melaço pendurada em galhos.', diferencas:'Corpo fino e asas amplas achatadas ao pousar; lagartas com locomoção em arco, diferente das demais.' , livro:'Órgão timpânico abdominal morfologicamente distinto.' },
+    { id:'crambidae', nome:'Mariposas-das-gramíneas', sci:'Crambidae', rar:1, peri:1, dif:2, amb:'jardim, gramado, área aberta (noturna)', nota:'Mariposas pequenas comumente vistas voando baixo sobre gramados à noite.', coleta:'Mariposas noturnas respondem bem a armadilha luminosa (lençol branco iluminado à noite) ou isca de banana fermentada com melaço pendurada em galhos.', diferencas:'Mariposas pequenas associadas a gramíneas, menores e menos robustas que Pyralidae.' , livro:'Porção basal da margem costal da asa não espessada; extensão membranosa torácico-abdominal conspícua entre as câmaras timpânicas.' },
+    { id:'pyralidae', nome:'Pequenas-mariposas-piraustídeas', sci:'Pyralidae', rar:1, peri:1, dif:2, amb:'jardim, área urbana (noturna)', nota:'Grupo diverso, com espécies associadas a grãos e produtos armazenados.', coleta:'Mariposas noturnas respondem bem a armadilha luminosa (lençol branco iluminado à noite) ou isca de banana fermentada com melaço pendurada em galhos.', diferencas:'Semelhante a Crambidae, mas associada a produtos armazenados e ambientes internos, não a gramíneas no campo.' },
+    { id:'limacodidae', nome:'Mariposas-lagarta-babosa', sci:'Limacodidae', rar:3, peri:4, dif:2, amb:'mata, jardim', nota:'Lagartas lembram lesmas e têm cerdas urticantes que causam ardência forte ao toque.', coleta:'Mariposas noturnas respondem bem a armadilha luminosa (lençol branco iluminado à noite) ou isca de banana fermentada com melaço pendurada em galhos.', diferencas:'Lagartas em formato de lesma sem prolegs visíveis, diferente das lagartas com pernas evidentes de Megalopygidae.' },
+    { id:'megalopygidae', nome:'Lagartas-de-fogo', sci:'Megalopygidae', rar:3, peri:5, dif:2, amb:'mata, jardim', nota:'Lagartas peludas e fofas na aparência, mas escondem espinhos que causam queimação intensa.', coleta:'Mariposas noturnas respondem bem a armadilha luminosa (lençol branco iluminado à noite) ou isca de banana fermentada com melaço pendurada em galhos.', diferencas:'Lagartas peludas e volumosas com espinhos ocultos, mais perigosas ao toque que as de Limacodidae.' },
+    { id:'psychidae', nome:'Mariposas-de-saquinho', sci:'Psychidae', rar:3, peri:1, dif:2, amb:'jardim, mata', nota:'Lagartas constroem e carregam um estojo de gravetos e detritos ao redor do corpo.', coleta:'É mais fácil coletar a larva junto com seu estojo de detritos, procurando gravetos pendurados em folhas e galhos, do que capturar o adulto.', diferencas:'Única família cuja lagarta carrega um estojo externo de detritos, diferente de todas as outras da lista.' },
+    { id:'tineidae', nome:'Traças-dos-tecidos', sci:'Tineidae', rar:1, peri:1, dif:1, amb:'área urbana, dentro de casas', nota:'Larvas se alimentam de fibras, tecidos guardados e restos orgânicos secos.', coleta:'Mariposas noturnas respondem bem a armadilha luminosa (lençol branco iluminado à noite) ou isca de banana fermentada com melaço pendurada em galhos.', diferencas:'Mariposas minúsculas de ambiente interno, bem menores que Pyralidae e Crambidae.' },
+    { id:'gracillariidae', nome:'Mariposas-minadoras-de-folhas', sci:'Gracillariidae', rar:3, peri:1, dif:3, amb:'jardim, horta', nota:'Lagartas minúsculas cavam galerias visíveis dentro das folhas.', coleta:'Procure folhas com galerias visíveis (minas) e recolha o pedaço de folha; o adulto raramente é visto a olho nu.', diferencas:'Lagartas minadoras que vivem dentro do tecido foliar, diferente do hábito externo das demais lagartas.' },
   ]},
-  { id:'coleoptera', nome:'Besouros', sci:'Coleoptera', cor:'#4a4522', familias:[
-    { id:'scarabaeidae', nome:'Besouros-rola-bosta e joaninhas-do-mato', sci:'Scarabaeidae', rar:2, peri:1, dif:2, amb:'mata, solo, área rural', nota:'Grupo variado que inclui besouros escavadores e grandes besouros-rinoceronte.' },
-    { id:'cerambycidae', nome:'Besouros-serra-pau', sci:'Cerambycidae', rar:3, peri:2, dif:3, amb:'mata, madeira em decomposição', nota:'Antenas muito longas, quase do tamanho do corpo; larvas se desenvolvem dentro de troncos e galhos.' },
-    { id:'coccinellidae', nome:'Joaninhas', sci:'Coccinellidae', rar:1, peri:1, dif:1, amb:'jardim, horta', nota:'Besouros arredondados e coloridos, importantes predadores naturais de pulgões em plantas.' },
-    { id:'curculionidae', nome:'Gorgulhos (besouros-bico)', sci:'Curculionidae', rar:1, peri:1, dif:1, amb:'jardim, plantação, mata', nota:'Reconhecidos pela "cabeça" alongada em formato de bico; muitas espécies associadas a sementes e frutos.' },
-    { id:'chrysomelidae', nome:'Besouros-das-folhas', sci:'Chrysomelidae', rar:1, peri:1, dif:1, amb:'jardim, mata, horta', nota:'Pequenos besouros brilhantes e coloridos que se alimentam de folhagem.' },
-    { id:'lampyridae', nome:'Vaga-lumes', sci:'Lampyridae', rar:3, peri:1, dif:3, amb:'mata, borda de mata, mangue (noturno)', nota:'Produzem luz própria (bioluminescência) para se comunicar à noite; comuns perto de áreas úmidas.' },
-    { id:'passalidae', nome:'Besouros-patriarcas', sci:'Passalidae', rar:4, peri:1, dif:3, amb:'mata, madeira apodrecida', nota:'Vivem em pequenos grupos familiares dentro de troncos podres, algo raro entre os insetos.' },
-    { id:'elateridae', nome:'Besouros-clique (bate-estaca)', sci:'Elateridae', rar:2, peri:1, dif:2, amb:'jardim, mata', nota:'Quando ficam de costas, dão um "clique" e saltam no ar para se virar novamente.' },
-    { id:'buprestidae', nome:'Besouros-joia', sci:'Buprestidae', rar:4, peri:1, dif:3, amb:'mata, área com árvores', nota:'Exoesqueleto com brilho metálico intenso; larvas se desenvolvem sob a casca de árvores.' },
-    { id:'meloidae', nome:'Besouros-bolha', sci:'Meloidae', rar:3, peri:4, dif:2, amb:'área aberta, capim', nota:'Liberam uma substância irritante para a pele quando se sentem ameaçados.' },
-    { id:'staphylinidae', nome:'Besouros-rove', sci:'Staphylinidae', rar:3, peri:2, dif:3, amb:'solo, folhiço, matéria em decomposição', nota:'Corpo alongado e élitros curtos que deixam o abdômen exposto; comuns no folhiço da mata.' },
+  { id:'coleoptera', nome:'Besouros', sci:'Coleoptera', cor:'#4a4522', chaveOrdem:'Asas anteriores modificadas em élitros esclerotizados, justapostos em sutura mediana dorsal, protegendo as asas posteriores membranosas dobradas; aparelho bucal mastigador; metamorfose holometábola; antenas variáveis, tipicamente com 11 antenômeros.', familias:[
+    { id:'scarabaeidae', nome:'Besouros-rola-bosta e joaninhas-do-mato', sci:'Scarabaeidae', rar:2, peri:1, dif:2, amb:'mata, solo, área rural', nota:'Grupo variado que inclui besouros escavadores e grandes besouros-rinoceronte.', coleta:'Use armadilha de queda (pitfall) com isca de fruta ou carne em decomposição, e busque ativamente sob cascas e troncos com o auxílio de um guarda-chuva entomológico.', diferencas:'Antenas lameladas (terminam em lâminas que se abrem como um leque), ausentes nas demais famílias de besouros.' , livro:'Margem anterior da cabeça no máximo voltada para baixo, nunca para trás; antenas lameladas.' },
+    { id:'cerambycidae', nome:'Besouros-serra-pau', sci:'Cerambycidae', rar:3, peri:2, dif:3, amb:'mata, madeira em decomposição', nota:'Antenas muito longas, quase do tamanho do corpo; larvas se desenvolvem dentro de troncos e galhos.', coleta:'Use armadilha de queda (pitfall) com isca de fruta ou carne em decomposição, e busque ativamente sob cascas e troncos com o auxílio de um guarda-chuva entomológico.', diferencas:'Antenas extremamente longas, muitas vezes maiores que o corpo — diferencia imediatamente das outras famílias.' , livro:'Esporões tibiais, na maioria das espécies, 2–2–2; protíbia com limpador de antena subapical (sulco cerdoso); tarsos pseudotetrâmeros.' },
+    { id:'coccinellidae', nome:'Joaninhas', sci:'Coccinellidae', rar:1, peri:1, dif:1, amb:'jardim, horta', nota:'Besouros arredondados e coloridos, importantes predadores naturais de pulgões em plantas.', coleta:'Use armadilha de queda (pitfall) com isca de fruta ou carne em decomposição, e busque ativamente sob cascas e troncos com o auxílio de um guarda-chuva entomológico.', diferencas:'Corpo pequeno, arredondado e convexo com pintas, bem distinto do formato alongado da maioria dos besouros.' , livro:'Margem posterior do ventrito V simples; pronoto sem par de impressões basais.' },
+    { id:'curculionidae', nome:'Gorgulhos (besouros-bico)', sci:'Curculionidae', rar:1, peri:1, dif:1, amb:'jardim, plantação, mata', nota:'Reconhecidos pela "cabeça" alongada em formato de bico; muitas espécies associadas a sementes e frutos.', coleta:'Use armadilha de queda (pitfall) com isca de fruta ou carne em decomposição, e busque ativamente sob cascas e troncos com o auxílio de um guarda-chuva entomológico.', diferencas:'Cabeça prolongada em um \'bico\' (rostro), exclusivo entre os besouros da lista.' , livro:'Antenas geniculadas, com escapo maior que 3 vezes o comprimento do pedicelo; clava compacta; ventritos I e II conatos.' },
+    { id:'chrysomelidae', nome:'Besouros-das-folhas', sci:'Chrysomelidae', rar:1, peri:1, dif:1, amb:'jardim, mata, horta', nota:'Pequenos besouros brilhantes e coloridos que se alimentam de folhagem.', coleta:'Use armadilha de queda (pitfall) com isca de fruta ou carne em decomposição, e busque ativamente sob cascas e troncos com o auxílio de um guarda-chuva entomológico.', diferencas:'Corpo pequeno, ovalado e brilhante, sem o rostro de Curculionidae nem as antenas longas de Cerambycidae.' , livro:'Garras denteadas; ventritos I e II livres e de largura similar; edeago do tipo crisomeloide; protíbia sem limpador de antena subapical.' },
+    { id:'lampyridae', nome:'Vaga-lumes', sci:'Lampyridae', rar:3, peri:1, dif:3, amb:'mata, borda de mata, mangue (noturno)', nota:'Produzem luz própria (bioluminescência) para se comunicar à noite; comuns perto de áreas úmidas.', coleta:'Melhor coletado à noite: observe o pisca-pisca luminoso e capture com rede ou pote diretamente no local do brilho.', diferencas:'Capacidade de emitir luz própria, ausente em todas as outras famílias de besouros da região.' , livro:'Órgão luminescente presente (indicado por mancha branco-amarelada nos ventritos apicais); fêmeas de algumas linhagens larviformes.' },
+    { id:'passalidae', nome:'Besouros-patriarcas', sci:'Passalidae', rar:4, peri:1, dif:3, amb:'mata, madeira apodrecida', nota:'Vivem em pequenos grupos familiares dentro de troncos podres, algo raro entre os insetos.', coleta:'Procure dentro de troncos grandes em decomposição na mata, abrindo a madeira podre com cuidado.', diferencas:'Vivem em pequenos grupos sociais dentro de troncos podres, comportamento não visto nas demais famílias.' , livro:'Élitros estriados; tamanho corporal maior que 13 mm.' },
+    { id:'elateridae', nome:'Besouros-clique (bate-estaca)', sci:'Elateridae', rar:2, peri:1, dif:2, amb:'jardim, mata', nota:'Quando ficam de costas, dão um "clique" e saltam no ar para se virar novamente.', coleta:'Use armadilha de queda (pitfall) com isca de fruta ou carne em decomposição, e busque ativamente sob cascas e troncos com o auxílio de um guarda-chuva entomológico.', diferencas:'Saltam no ar produzindo um estalo ao se virar de costas, mecanismo exclusivo dessa família.' , livro:'Corpo alongado, com lados subparalelos e élitros afunilando em direção ao ápice; pronoto com ângulos posteriores fortemente projetados.' },
+    { id:'buprestidae', nome:'Besouros-joia', sci:'Buprestidae', rar:4, peri:1, dif:3, amb:'mata, área com árvores', nota:'Exoesqueleto com brilho metálico intenso; larvas se desenvolvem sob a casca de árvores.', coleta:'Use armadilha de queda (pitfall) com isca de fruta ou carne em decomposição, e busque ativamente sob cascas e troncos com o auxílio de um guarda-chuva entomológico.', diferencas:'Brilho metálico intenso e corpo em formato de bala, mais alongado que Chrysomelidae.' , livro:'Corpo frequentemente com coloração vistosa ou brilho metálico.' },
+    { id:'meloidae', nome:'Besouros-bolha', sci:'Meloidae', rar:3, peri:4, dif:2, amb:'área aberta, capim', nota:'Liberam uma substância irritante para a pele quando se sentem ameaçados.', coleta:'Use pinça ou luvas ao manusear — nunca com a mão nua — pois a hemolinfa pode causar bolhas na pele.', diferencas:'Élitros moles e flexíveis (ao contrário da maioria) e capacidade de liberar cantaridina irritante.' , livro:'Olhos não ou levemente emarginados; esporões tibiais glabros.' },
+    { id:'staphylinidae', nome:'Besouros-rove', sci:'Staphylinidae', rar:3, peri:2, dif:3, amb:'solo, folhiço, matéria em decomposição', nota:'Corpo alongado e élitros curtos que deixam o abdômen exposto; comuns no folhiço da mata.', coleta:'Use armadilha de queda (pitfall) com isca de fruta ou carne em decomposição, e busque ativamente sob cascas e troncos com o auxílio de um guarda-chuva entomológico.', diferencas:'Élitros muito curtos que deixam a maior parte do abdômen exposto, diferente da cobertura completa das outras famílias.' , livro:'Tarsômeros simples, não lobados; discrímen metatorácico ausente; garras simples.' },
+    { id:'carabidae', nome:'Besouros-corredores', sci:'Carabidae', rar:2, peri:2, dif:3, amb:'mata, jardim, sob pedras', nota:'Predadores ágeis de solo; algumas espécies liberam secreções defensivas quando perturbadas.', coleta:'Use armadilha de queda (pitfall) com isca de fruta ou carne em decomposição, e busque ativamente sob cascas e troncos com o auxílio de um guarda-chuva entomológico.', diferencas:'Pernas longas adaptadas para corrida rápida, mais ágeis que a maioria dos outros besouros terrestres.' , livro:'Sutura catepisternal sempre presente (ausente apenas em Rhysodinae).' },
+    { id:'tenebrionidae', nome:'Cascudinhos', sci:'Tenebrionidae', rar:2, peri:1, dif:2, amb:'folhiço, sob troncos, solo', nota:'Besouros escuros e resistentes, ativos principalmente à noite.', coleta:'Use armadilha de queda (pitfall) com isca de fruta ou carne em decomposição, e busque ativamente sob cascas e troncos com o auxílio de um guarda-chuva entomológico.', diferencas:'Corpo escuro e fosco, geralmente mais lento e menos ativo que Carabidae.' , livro:'Ventritos I–III conatos; processo prosternal estendendo-se atrás das coxas; sutura frontoclipeal presente.' },
+    { id:'dytiscidae', nome:'Besouros-mergulhadores', sci:'Dytiscidae', rar:3, peri:2, dif:3, amb:'lagoas, açudes, água parada', nota:'Nadam ativamente sob a água; adultos e larvas são predadores vorazes.', coleta:'Peneira ou rapiché em lagoas e açudes de água parada, passando pela vegetação submersa.', diferencas:'Pernas traseiras achatadas em forma de remo, adaptadas à natação, ausentes nas famílias terrestres.' },
+    { id:'hydrophilidae', nome:'Besouros-aquáticos-nadadores', sci:'Hydrophilidae', rar:3, peri:1, dif:3, amb:'lagoas, açudes, água parada', nota:'Vivem em água doce parada, alimentando-se principalmente de matéria vegetal.', coleta:'Peneira ou rapiché em lagoas e açudes de água parada, junto à vegetação aquática.', diferencas:'Também aquático como Dytiscidae, mas com antenas curtas em maça e nado menos ágil.' , livro:'Palpo maxilar mais longo que a antena; élitros cobrindo totalmente o abdômen.' },
+    { id:'erotylidae', nome:'Besouros-dos-cogumelos', sci:'Erotylidae', rar:3, peri:1, dif:2, amb:'mata, fungos em troncos', nota:'Coloridos, associados a fungos e cogumelos que crescem em troncos caídos.', coleta:'Use armadilha de queda (pitfall) com isca de fruta ou carne em decomposição, e busque ativamente sob cascas e troncos com o auxílio de um guarda-chuva entomológico.', diferencas:'Cores vivas contrastantes e associação direta a fungos e cogumelos, hábito raro nas outras famílias.' , livro:'Antenas sem clava distinta (por vezes incrassada); tarsos simples ou com tarsômeros I–III lobados.' },
+    { id:'nitidulidae', nome:'Besouros-das-frutas', sci:'Nitidulidae', rar:2, peri:1, dif:1, amb:'jardim, frutas em decomposição', nota:'Pequenos besouros atraídos por frutas maduras ou fermentando.', coleta:'Use armadilha de queda (pitfall) com isca de fruta ou carne em decomposição, e busque ativamente sob cascas e troncos com o auxílio de um guarda-chuva entomológico.', diferencas:'Porte muito pequeno, élitros que às vezes não cobrem todo o abdômen; associados a frutas fermentando.' , livro:'Abdômen com sete ventritos; clava antenal com três antenômeros; antenas com 11 antenômeros; placas metacoxais ausentes; inserções antenais expostas.' },
   ]},
-  { id:'hymenoptera', nome:'Formigas, abelhas e vespas', sci:'Hymenoptera', cor:'#7a3b12', familias:[
-    { id:'formicidae', nome:'Formigas', sci:'Formicidae', rar:1, peri:2, dif:2, amb:'em toda parte: mata, restinga, mangue, urbano', nota:'Vivem em colônias organizadas; a região tem desde saúvas cortadeiras até formigas-de-fogo.' },
-    { id:'apidae', nome:'Abelhas', sci:'Apidae', rar:1, peri:3, dif:2, amb:'jardim, mata, restinga', nota:'Inclui abelhas-sem-ferrão nativas (meliponíneos) e mamangavas, importantes polinizadoras.' },
-    { id:'vespidae', nome:'Vespas e marimbondos', sci:'Vespidae', rar:2, peri:4, dif:3, amb:'jardim, beiral de casa, mata', nota:'Constroem ninhos de papel mastigado; muitas espécies são predadoras de outros insetos.' },
-    { id:'crabronidae', nome:'Vespas-caçadoras solitárias', sci:'Crabronidae', rar:3, peri:3, dif:3, amb:'jardim, solo arenoso', nota:'Vespas solitárias que caçam presas (aranhas, insetos) para alimentar as larvas em ninhos individuais.' },
-    { id:'ichneumonidae', nome:'Vespas-parasitoides', sci:'Ichneumonidae', rar:3, peri:2, dif:3, amb:'mata, jardim', nota:'Longo ovipositor usado para depositar ovos dentro de lagartas e outras larvas hospedeiras.' },
+  { id:'hymenoptera', nome:'Formigas, abelhas e vespas', sci:'Hymenoptera', cor:'#7a3b12', chaveOrdem:'Dois pares de asas membranosas acoplados por hâmulos alares, venação reduzida em relação a ordens basais; fêmeas frequentemente com ovipositor modificado em ferrão ou serra; metamorfose holometábola; pecíolo frequentemente estreitando a junção tórax-abdômen.', familias:[
+    { id:'formicidae', nome:'Formigas', sci:'Formicidae', rar:1, peri:2, dif:2, amb:'em toda parte: mata, restinga, mangue, urbano', nota:'Vivem em colônias organizadas; a região tem desde saúvas cortadeiras até formigas-de-fogo.', coleta:'Use rede entomológica sobre flores, com cuidado redobrado pelo ferrão; formigas devem ser coletadas isoladas, forrageando, sem destruir o ninho.', diferencas:'Vivem sempre em colônias sociais organizadas, diferente do hábito solitário da maioria das vespas da lista.' , livro:'Escapo antenal mais longo que a metade do comprimento do flagelo; metassoma peciolado (superfamília Formicoidea).' },
+    { id:'apidae', nome:'Abelhas', sci:'Apidae', rar:1, peri:3, dif:2, amb:'jardim, mata, restinga', nota:'Inclui abelhas-sem-ferrão nativas (meliponíneos) e mamangavas, importantes polinizadoras.', coleta:'Use rede entomológica sobre flores, com cuidado redobrado pelo ferrão; formigas devem ser coletadas isoladas, forrageando, sem destruir o ninho.', diferencas:'Corpo peludo adaptado ao transporte de pólen, ausente nas vespas predadoras.' , livro:'Corpo com cerdas ramificadas e plumosas; tíbia e basitarso posteriores fortemente achatados (Apoidea). Apinae: asa anterior com duas (ocasionalmente três) células submarginais; escopa nas pernas posteriores ou corbícula na face externa da tíbia posterior. Nesta obra, todas as abelhas compõem a família Apidae (sensu lato), com cinco subfamílias na fauna brasileira: Colletinae, Halictinae, Andreninae, Megachilinae e Apinae.' },
+    { id:'vespidae', nome:'Vespas e marimbondos', sci:'Vespidae', rar:2, peri:4, dif:3, amb:'jardim, beiral de casa, mata', nota:'Constroem ninhos de papel mastigado; muitas espécies são predadoras de outros insetos.', coleta:'Use rede entomológica sobre flores, com cuidado redobrado pelo ferrão; formigas devem ser coletadas isoladas, forrageando, sem destruir o ninho.', diferencas:'Corpo liso e cintura bem marcada, sem os pelos coletores de pólen de Apidae.' },
+    { id:'crabronidae', nome:'Vespas-caçadoras solitárias', sci:'Crabronidae', rar:3, peri:3, dif:3, amb:'jardim, solo arenoso', nota:'Vespas solitárias que caçam presas (aranhas, insetos) para alimentar as larvas em ninhos individuais.', coleta:'Use rede entomológica sobre flores, com cuidado redobrado pelo ferrão; formigas devem ser coletadas isoladas, forrageando, sem destruir o ninho.', diferencas:'Vespas solitárias caçadoras, sem organização social como Vespidae e Formicidae.' , livro:'Garras tarsais simples; tíbia média com um ou dois esporões (superfamília Apoidea, vespas esfeciformes).' },
+    { id:'ichneumonidae', nome:'Vespas-parasitoides', sci:'Ichneumonidae', rar:3, peri:2, dif:3, amb:'mata, jardim', nota:'Longo ovipositor usado para depositar ovos dentro de lagartas e outras larvas hospedeiras.', coleta:'Use rede entomológica sobre flores, com cuidado redobrado pelo ferrão; formigas devem ser coletadas isoladas, forrageando, sem destruir o ninho.', diferencas:'Ovipositor longo e visível usado para parasitar hospedeiros, ausente nas abelhas e formigas.' , livro:'Célula radial alongada a ponto de ultrapassar o ponto de divergência entre as veias R e Rs.' },
+    { id:'halictidae', nome:'Abelhas-do-suor', sci:'Halictidae', rar:2, peri:2, dif:2, amb:'jardim, flores, solo', nota:'Nidificam no solo; algumas espécies são atraídas pelo suor humano.', coleta:'Use rede entomológica sobre flores, com cuidado redobrado pelo ferrão; formigas devem ser coletadas isoladas, forrageando, sem destruir o ninho.', diferencas:'Abelhas menores que Apidae, com frequente brilho metálico e nidificação no solo.' , livro:'Nesta obra tratada como subfamília Halictinae de Apidae s.l.: uma única sutura subantenal, sem área subantenal definida; primeira abscissa da veia M da asa anterior conspicuamente encurvada ou angulada; integumento geralmente com forte brilho metálico.' },
+    { id:'megachilidae', nome:'Abelhas-cortadeiras-de-folhas', sci:'Megachilidae', rar:2, peri:2, dif:2, amb:'jardim, flores', nota:'Recortam pedaços de folhas para forrar seus ninhos.', coleta:'Use rede entomológica sobre flores, com cuidado redobrado pelo ferrão; formigas devem ser coletadas isoladas, forrageando, sem destruir o ninho.', diferencas:'Transportam pólen na parte inferior do abdômen (escopa ventral), diferente das pernas usadas por Apidae.' , livro:'Nesta obra tratada como subfamília Megachilinae de Apidae s.l.: asa anterior sempre com duas células submarginais; escopa da fêmea, quando presente, restrita aos esternos metassomais.' },
+    { id:'colletidae', nome:'Abelhas-envernizadoras', sci:'Colletidae', rar:3, peri:2, dif:2, amb:'restinga, solo arenoso, jardim', nota:'Revestem a célula do ninho com uma secreção parecida com celofane.', coleta:'Use rede entomológica sobre flores, com cuidado redobrado pelo ferrão; formigas devem ser coletadas isoladas, forrageando, sem destruir o ninho.', diferencas:'Revestem o ninho com secreção impermeável parecida com celofane, hábito exclusivo entre as abelhas da lista.' , livro:'Nesta obra tratada como subfamília Colletinae de Apidae s.l.: glossa truncada, normalmente bilobada, às vezes profundamente bífida.' },
+    { id:'andrenidae', nome:'Abelhas-mineiras', sci:'Andrenidae', rar:3, peri:2, dif:2, amb:'solo arenoso, restinga, jardim', nota:'Nidificam em túneis escavados no solo, comuns em áreas arenosas.', coleta:'Use rede entomológica sobre flores, com cuidado redobrado pelo ferrão; formigas devem ser coletadas isoladas, forrageando, sem destruir o ninho.', diferencas:'Abelhas solitárias que escavam túneis profundos no solo, sem a organização social de Apidae.' , livro:'Nesta obra tratada como subfamília Andreninae de Apidae s.l.: glossa terminando em ponta aguda; coloração do integumento variável, com brilho metálico, quando presente, restrito ao metassoma.' },
+    { id:'sphecidae', nome:'Vespas-cavadoras', sci:'Sphecidae', rar:2, peri:3, dif:3, amb:'jardim, solo arenoso', nota:'Vespas solitárias que cavam ninhos no solo para armazenar presas paralisadas.', coleta:'Use rede entomológica sobre flores, com cuidado redobrado pelo ferrão; formigas devem ser coletadas isoladas, forrageando, sem destruir o ninho.', diferencas:'Corpo alongado com cintura fina e longa, mais esguio que Crabronidae.' , livro:'Tergo apical sem placa pigidial; coxa média sem carena lateral; órbitas internas retas ou levemente emarginadas.' },
+    { id:'pompilidae', nome:'Vespas-caçadoras-de-aranhas', sci:'Pompilidae', rar:3, peri:4, dif:3, amb:'jardim, mata, solo', nota:'Caçam aranhas grandes para alimentar as larvas; ferroada considerada uma das mais dolorosas entre os insetos.', coleta:'Use rede entomológica com cautela redobrada; evite manuseio direto pelo risco de ferroada muito dolorosa.', diferencas:'Especializadas em caçar exclusivamente aranhas, hábito mais restrito que Sphecidae e Crabronidae.' },
+    { id:'mutillidae', nome:'Formigas-de-veludo', sci:'Mutillidae', rar:3, peri:4, dif:3, amb:'solo arenoso, restinga, área aberta', nota:'Fêmeas não têm asas e lembram formigas peludas; ferroada muito dolorosa apesar do pequeno porte.', coleta:'Use pinça longa e nunca segure com a mão — a ferroada da fêmea está entre as mais dolorosas dos insetos da região.', diferencas:'Fêmeas sem asas, parecendo formigas peludas, diferente de todas as outras vespas aladas da lista.' , livro:'Faixa estreita especializada de cerdas finas nas laterais do tergo II; fêmeas ápteras (superfamília Vespoidea).' },
+    { id:'braconidae', nome:'Vespas-parasitoides-pequenas', sci:'Braconidae', rar:3, peri:1, dif:4, amb:'jardim, mata', nota:'Depositam ovos em lagartas e outros insetos hospedeiros, controlando naturalmente pragas.', coleta:'Armadilha Malaise ou rede fina sobre vegetação baixa funcionam melhor que a captura visual, dado o tamanho reduzido.', diferencas:'Menores que Ichneumonidae e com venação de asas mais simplificada.' , livro:'Célula radial não se estendendo além do ponto de divergência entre as veias R e Rs.' },
+    { id:'chalcididae', nome:'Vespas-calcidídeas', sci:'Chalcididae', rar:4, peri:1, dif:4, amb:'jardim, mata', nota:'Pequenas vespas parasitoides com fêmures traseiros engrossados.', coleta:'Armadilha Malaise ou rede fina sobre vegetação baixa, dado o tamanho reduzido.', diferencas:'Fêmures traseiros engrossados e dentados, ausentes em Braconidae e Ichneumonidae.' , livro:'Ovipositor reto e voltado para trás; tergo metassomal II distintamente mais longo que os demais.' },
+    { id:'eulophidae', nome:'Microvespas-parasitoides', sci:'Eulophidae', rar:4, peri:1, dif:5, amb:'jardim, mata, folhagem', nota:'Vespas minúsculas que parasitam ovos e larvas de outros insetos.', coleta:'Armadilha Malaise é o método mais eficiente, já que a captura visual é quase inviável pelo tamanho microscópico.', diferencas:'Entre as menores vespas parasitoides da lista, quase microscópicas.' , livro:'Esporão da tíbia anterior curto e reto; notaulos incompletos; tamanho corporal e coloração do integumento muito variáveis.' },
+    { id:'encyrtidae', nome:'Microvespas-de-cochonilhas', sci:'Encyrtidae', rar:4, peri:1, dif:5, amb:'jardim, horta', nota:'Parasitam cochonilhas e outros insetos sugadores de seiva.', coleta:'Armadilha Malaise ou criação de hospedeiros (cochonilhas) em laboratório para aguardar a emergência.', diferencas:'Corpo compacto e arredondado, diferente do formato mais alongado de Eulophidae.' },
+    { id:'diapriidae', nome:'Microvespas-parasitoides-de-pupas', sci:'Diapriidae', rar:4, peri:1, dif:5, amb:'folhiço, mata', nota:'Parasitam pupas de moscas e outros insetos no solo e folhiço.', coleta:'Armadilha Malaise sobre folhiço, onde os hospedeiros (pupas de mosca) costumam estar.', diferencas:'Antenas longas inseridas próximas à boca, formato distinto das demais microvespas.' , livro:'Metassoma peciolado, com segmento I nodular; flagelômeros basais curtos e apicais mais longos (superfamília Diaprioidea).' },
   ]},
-  { id:'diptera', nome:'Moscas e mosquitos', sci:'Diptera', cor:'#2e4a55', familias:[
-    { id:'culicidae', nome:'Pernilongos e mosquitos', sci:'Culicidae', rar:1, peri:3, dif:1, amb:'área urbana, mangue, água parada', nota:'Fêmeas picam para obter sangue; região costeira favorece a proliferação perto de água parada.' },
-    { id:'syrphidae', nome:'Moscas-das-flores', sci:'Syrphidae', rar:2, peri:1, dif:3, amb:'jardim, área florida', nota:'Imitam abelhas e vespas na cor e no voo pairado, mas são inofensivas; ajudam na polinização.' },
-    { id:'tabanidae', nome:'Mutucas', sci:'Tabanidae', rar:3, peri:3, dif:4, amb:'área rural, mata, próximo a gado', nota:'Fêmeas dão picadas doloridas; atraídas por calor e movimento de animais grandes.' },
-    { id:'asilidae', nome:'Moscas-assassinas', sci:'Asilidae', rar:3, peri:2, dif:4, amb:'área aberta, restinga', nota:'Predadoras ágeis que capturam outros insetos em pleno voo.' },
-    { id:'muscidae', nome:'Moscas domésticas', sci:'Muscidae', rar:1, peri:1, dif:1, amb:'área urbana', nota:'Grupo bem conhecido, associado a ambientes humanos e restos orgânicos.' },
+  { id:'diptera', nome:'Moscas e mosquitos', sci:'Diptera', cor:'#2e4a55', chaveOrdem:'Apenas um par de asas funcionais (mesotorácico); par posterior reduzido a halteres; aparelho bucal variável (sugador, picador-sugador ou lambedor); metamorfose holometábola.', familias:[
+    { id:'culicidae', nome:'Pernilongos e mosquitos', sci:'Culicidae', rar:1, peri:3, dif:1, amb:'área urbana, mangue, água parada', nota:'Fêmeas picam para obter sangue; região costeira favorece a proliferação perto de água parada.', coleta:'Evite coletar diretamente sobre a pele; use armadilhas com CO2 ou luz, ou rede sobre água parada ao entardecer.', diferencas:'Corpo e pernas finas e longas, com aparelho bucal perfurante-sugador visível, ausente na maioria das outras moscas.' , livro:'Corpo com escamas; probóscide longa, estendendo-se muito além do clípeo.' },
+    { id:'syrphidae', nome:'Moscas-das-flores', sci:'Syrphidae', rar:2, peri:1, dif:3, amb:'jardim, área florida', nota:'Imitam abelhas e vespas na cor e no voo pairado, mas são inofensivas; ajudam na polinização.', coleta:'Rede entomológica com varredura rápida sobre a vegetação, ou armadilhas com isca (fruta, carne ou fezes em decomposição, dependendo da família).', diferencas:'Imitam abelhas e vespas na cor, mas têm apenas um par de asas e pairam no ar sobre flores.' , livro:'Presença de uma veia espúria (vena spuria) simples percorrendo a asa.' },
+    { id:'tabanidae', nome:'Mutucas', sci:'Tabanidae', rar:3, peri:3, dif:4, amb:'área rural, mata, próximo a gado', nota:'Fêmeas dão picadas doloridas; atraídas por calor e movimento de animais grandes.', coleta:'Armadilhas do tipo Nzi ou Manitoba com isca escura e CO2 atraem bem as fêmeas, que são as que picam.', diferencas:'Porte grande e olhos enormes e coloridos, com picada bem mais dolorosa que a de Culicidae.' , livro:'Pós-pedicelo geralmente com quatro ou mais artículos, nunca com estilo aristiforme; machos holópticos, face relativamente curta.' },
+    { id:'asilidae', nome:'Moscas-assassinas', sci:'Asilidae', rar:3, peri:2, dif:4, amb:'área aberta, restinga', nota:'Predadoras ágeis que capturam outros insetos em pleno voo.', coleta:'Rede entomológica com varredura rápida sobre a vegetação, ou armadilhas com isca (fruta, carne ou fezes em decomposição, dependendo da família).', diferencas:'Pernas fortes e espinhosas para capturar presas em voo, hábito predador ausente nas outras moscas.' , livro:'Face com cerdas longas denominadas místax; aparelho bucal curto e forte, do tipo picador.' },
+    { id:'muscidae', nome:'Moscas domésticas', sci:'Muscidae', rar:1, peri:1, dif:1, amb:'área urbana', nota:'Grupo bem conhecido, associado a ambientes humanos e restos orgânicos.', coleta:'Rede entomológica com varredura rápida sobre a vegetação, ou armadilhas com isca (fruta, carne ou fezes em decomposição, dependendo da família).', diferencas:'Aparelho bucal do tipo esponja, sem picar, diferente de Tabanidae e Culicidae.' , livro:'Veia R4+5 simples; tórax com laterotergito glabro.' },
+    { id:'chironomidae', nome:'Mosquitos-pólvora', sci:'Chironomidae', rar:1, peri:1, dif:2, amb:'lagoas, água parada, mangue', nota:'Parecidos com pernilongos, mas não picam; formam grandes nuvens perto de água parada.', coleta:'Procure as larvas em lodo e vegetação submersa de lagoas com peneira fina.', diferencas:'Muito parecidos com Culicidae, mas sem o aparelho bucal picador — não mordem.' , livro:'Veia CuP fundindo-se em ângulo obtuso com a asa, longe da margem; peças bucais quase sempre não picadoras (diferem de Culicidae).' },
+    { id:'ceratopogonidae', nome:'Maruins', sci:'Ceratopogonidae', rar:1, peri:2, dif:1, amb:'mangue, praia, área costeira', nota:'Picadas irritantes de fêmeas minúsculas, muito comuns ao entardecer perto do mangue.', coleta:'Rede entomológica com varredura rápida sobre a vegetação, ou armadilhas com isca (fruta, carne ou fezes em decomposição, dependendo da família).', diferencas:'Muito menores que Culicidae e Chironomidae, quase invisíveis a olho nu.' , livro:'Uma ou duas células radiais presentes bem antes do ápice da asa; peças bucais picadoras.' },
+    { id:'simuliidae', nome:'Borrachudos', sci:'Simuliidae', rar:2, peri:3, dif:1, amb:'próximo a riachos e água corrente', nota:'Fêmeas dão picadas doloridas; larvas se desenvolvem presas a pedras em água corrente.', coleta:'Procure as larvas fixas a pedras submersas em riachos de água corrente.', diferencas:'Corpo curto, corcunda e robusto, diferente do corpo alongado dos mosquitos Culicidae.' , livro:'Pós-pedicelo com cerdas curtas em ambos os sexos; probóscide alongada, bem maior que a altura da cabeça.' },
+    { id:'psychodidae', nome:'Mosquitos-palha', sci:'Psychodidae', rar:1, peri:2, dif:1, amb:'área urbana, esgoto, banheiros', nota:'Pequenos mosquitos peludos; algumas espécies podem transmitir a leishmaniose.', coleta:'Rede entomológica com varredura rápida sobre a vegetação, ou armadilhas com isca (fruta, carne ou fezes em decomposição, dependendo da família).', diferencas:'Asas peludas em formato de coração, pousam em telhado, diferente das demais famílias de dípteros.' , livro:'Inserção da antena próxima ou abaixo do nível da margem ocular.' },
+    { id:'tipulidae', nome:'Mosquitos-pernas-de-pau', sci:'Tipulidae', rar:2, peri:1, dif:2, amb:'jardim, mata, área úmida', nota:'Pernas muito longas e finas; apesar do porte, são inofensivos.', coleta:'Rede entomológica com varredura rápida sobre a vegetação, ou armadilhas com isca (fruta, carne ou fezes em decomposição, dependendo da família).', diferencas:'Pernas extremamente longas e frágeis, exclusivo dessa família entre as listadas.' , livro:'Rostro muito desenvolvido, mais longo que a altura da cabeça.' },
+    { id:'calliphoridae', nome:'Moscas-varejeiras', sci:'Calliphoridae', rar:1, peri:1, dif:1, amb:'área urbana, carcaças', nota:'Corpo com brilho metálico; atraídas por matéria orgânica em decomposição.', coleta:'Rede entomológica com varredura rápida sobre a vegetação, ou armadilhas com isca (fruta, carne ou fezes em decomposição, dependendo da família).', diferencas:'Corpo com brilho metálico verde ou azul, mais vistoso que Muscidae.'  },
+    { id:'sarcophagidae', nome:'Moscas-de-carne', sci:'Sarcophagidae', rar:1, peri:1, dif:1, amb:'área urbana, carcaças', nota:'Reconhecidas pelo padrão listrado no tórax; associadas a carne em decomposição.', coleta:'Rede entomológica com varredura rápida sobre a vegetação, ou armadilhas com isca (fruta, carne ou fezes em decomposição, dependendo da família).', diferencas:'Padrão listrado em preto e cinza no tórax, sem o brilho metálico de Calliphoridae.' , livro:'Pedicelo com uma projeção triangular, externa e mediana.' },
+    { id:'tephritidae', nome:'Moscas-das-frutas', sci:'Tephritidae', rar:2, peri:1, dif:2, amb:'horta, pomar, jardim', nota:'Asas com desenhos característicos; larvas se desenvolvem dentro de frutos.', coleta:'Rede entomológica com varredura rápida sobre a vegetação, ou armadilhas com isca (fruta, carne ou fezes em decomposição, dependendo da família).', diferencas:'Asas com desenhos e manchas característicos, ausentes na maioria das outras moscas.' , livro:'Cerda fronto-orbital anterior proclinada, e duas (raramente mais) reclinadas.' },
+    { id:'drosophilidae', nome:'Moscas-da-fruta', sci:'Drosophilidae', rar:1, peri:1, dif:1, amb:'cozinha, frutas maduras', nota:'Moscas minúsculas atraídas por frutas maduras ou fermentando.', coleta:'Rede entomológica com varredura rápida sobre a vegetação, ou armadilhas com isca (fruta, carne ou fezes em decomposição, dependendo da família).', diferencas:'Tamanho muito pequeno e olhos avermelhados, associadas a frutas fermentando.' , livro:'Arista com raios dorsais e ventrais (algumas espécies com apenas um raio ventral).' },
+    { id:'stratiomyidae', nome:'Moscas-soldado', sci:'Stratiomyidae', rar:2, peri:1, dif:2, amb:'jardim, compostagem', nota:'Larvas ajudam a decompor matéria orgânica; adultos muitas vezes imitam vespas.', coleta:'Rede entomológica com varredura rápida sobre a vegetação, ou armadilhas com isca (fruta, carne ou fezes em decomposição, dependendo da família).', diferencas:'Corpo achatado e com manchas metálicas, mais robusto que Syrphidae.' , livro:'Esporões tibiais geralmente ausentes.' },
+    { id:'bombyliidae', nome:'Moscas-abelha', sci:'Bombyliidae', rar:3, peri:1, dif:3, amb:'jardim, área florida', nota:'Corpo peludo que imita abelhas; pairam no ar junto a flores.', coleta:'Rede entomológica com varredura rápida sobre a vegetação, ou armadilhas com isca (fruta, carne ou fezes em decomposição, dependendo da família).', diferencas:'Corpo denso e peludo que imita abelhas, com longa probóscide rígida para sugar néctar em voo pairado.' , livro:'Célula m3 aberta; veias R4 e R5 pouco divergentes; moscas geralmente de maior porte.' },
+    { id:'dolichopodidae', nome:'Moscas-de-pernas-longas', sci:'Dolichopodidae', rar:2, peri:1, dif:2, amb:'jardim, folhagem úmida', nota:'Pequenas e de brilho metálico verde ou dourado, comuns sobre folhas.', coleta:'Rede entomológica com varredura rápida sobre a vegetação, ou armadilhas com isca (fruta, carne ou fezes em decomposição, dependendo da família).', diferencas:'Pernas longas e brilho metálico intenso, muito menores que Asilidae.' , livro:'Veia r–m situada no quarto basal da asa; corpo geralmente com brilho verde-metálico.' },
+    { id:'phoridae', nome:'Moscas-corcunda', sci:'Phoridae', rar:1, peri:1, dif:1, amb:'área urbana, matéria em decomposição', nota:'Corrida característica em ziguezague sobre superfícies antes de voar.', coleta:'Rede entomológica com varredura rápida sobre a vegetação, ou armadilhas com isca (fruta, carne ou fezes em decomposição, dependendo da família).', diferencas:'Corrida característica em ziguezague antes de voar, comportamento não visto em outras moscas.' , livro:'Veias da asa fracas e oblíquas em relação ao eixo longitudinal do corpo.' },
+    { id:'ephydridae', nome:'Moscas-das-margens', sci:'Ephydridae', rar:3, peri:1, dif:2, amb:'lagoas, mangue, água salobra', nota:'Toleram ambientes salobros e até salgados, comuns nas margens de corpos de água costeiros.', coleta:'Procure nas margens lodosas de corpos de água salobra, onde as larvas se desenvolvem.', diferencas:'Toleram água salobra e salgada, hábito raro entre as demais famílias de moscas.' , livro:'Espiráculos abdominais 1–5 situados no tergo correspondente; perna posterior com primeiro tarsômero mais longo que o segundo.' },
   ]},
-  { id:'hemiptera', nome:'Cigarras e percevejos', sci:'Hemiptera', cor:'#3d5c2e', familias:[
-    { id:'cicadidae', nome:'Cigarras', sci:'Cicadidae', rar:2, peri:1, dif:4, amb:'mata, área arborizada', nota:'Machos produzem o canto característico e alto do fim de tarde, típico da mata na região.' },
-    { id:'reduviidae', nome:'Percevejos-assassinos', sci:'Reduviidae', rar:3, peri:5, dif:3, amb:'mata, jardim, dentro de casas', nota:'Predadores de outros insetos; algumas espécies (barbeiros) podem transmitir a doença de Chagas.' },
-    { id:'pentatomidae', nome:'Percevejos-fedorentos', sci:'Pentatomidae', rar:1, peri:2, dif:1, amb:'horta, jardim, mata', nota:'Corpo em formato de escudo; liberam odor forte como defesa quando manuseados.' },
-    { id:'coreidae', nome:'Percevejos-das-vagens', sci:'Coreidae', rar:2, peri:1, dif:2, amb:'horta, jardim', nota:'Muitas espécies têm pernas traseiras alargadas e se alimentam de seiva de frutos e vagens.' },
-    { id:'membracidae', nome:'Cigarrinhas-espinho', sci:'Membracidae', rar:3, peri:1, dif:2, amb:'jardim, mata', nota:'Tórax com projeções bizarras que imitam espinhos de planta, camuflando o inseto sobre o caule.' },
-    { id:'cicadellidae', nome:'Cigarrinhas-verdes', sci:'Cicadellidae', rar:1, peri:1, dif:1, amb:'jardim, gramado, horta', nota:'Pequenas, saltadoras, alimentam-se de seiva; muito comuns em folhagem baixa.' },
-    { id:'belostomatidae', nome:'Barata-d\u2019água gigante', sci:'Belostomatidae', rar:4, peri:3, dif:3, amb:'lagoas, açudes, água doce parada', nota:'Percevejo aquático grande e predador, comum em corpos de água doce da região.' },
-    { id:'gerridae', nome:'Andarilhos-da-água', sci:'Gerridae', rar:2, peri:1, dif:2, amb:'lagoas, riachos, água parada', nota:'Deslizam sobre a superfície da água aproveitando a tensão superficial.' },
+  { id:'hemiptera', nome:'Cigarras e percevejos', sci:'Hemiptera', cor:'#3d5c2e', chaveOrdem:'Aparelho bucal picador-sugador (estiletes intramandibulares e intramaxilares em rostro labial); asas anteriores hemiélitros (base coriácea, ápice membranoso) em Heteroptera, ou homogêneas em Auchenorrhyncha/Sternorrhyncha; metamorfose paurometábola.', familias:[
+    { id:'cicadidae', nome:'Cigarras', sci:'Cicadidae', rar:2, peri:1, dif:4, amb:'mata, área arborizada', nota:'Machos produzem o canto característico e alto do fim de tarde, típico da mata na região.', coleta:'Guarda-chuva entomológico batendo a vegetação, ou rede de varredura sobre gramíneas e arbustos.', diferencas:'Porte grande e canto alto através de órgãos timbais, exclusivo dessa família entre os hemípteros da lista.' , livro:'Cabeça com três ocelos; fêmur anterior dilatado (superfamília Cicadoidea).' },
+    { id:'reduviidae', nome:'Percevejos-assassinos', sci:'Reduviidae', rar:3, peri:5, dif:3, amb:'mata, jardim, dentro de casas', nota:'Predadores de outros insetos; algumas espécies (barbeiros) podem transmitir a doença de Chagas.', coleta:'Evite manuseio direto: algumas espécies (barbeiros) podem transmitir a doença de Chagas; use pinça ou pote.', diferencas:'Bico curvo usado para predar outros insetos, mais robusto que o dos percevejos fitófagos.' , livro:'Superfície dorsal do corpo geralmente convexa; membrana da asa anterior com veias longitudinais grandes (às vezes mais de duas), ou raramente com poucas veias longitudinais.' },
+    { id:'pentatomidae', nome:'Percevejos-fedorentos', sci:'Pentatomidae', rar:1, peri:2, dif:1, amb:'horta, jardim, mata', nota:'Corpo em formato de escudo; liberam odor forte como defesa quando manuseados.', coleta:'Guarda-chuva entomológico batendo a vegetação, ou rede de varredura sobre gramíneas e arbustos.', diferencas:'Corpo em formato de escudo pentagonal, mais largo que Coreidae.' , livro:'Cápsula genital tubular; glândulas coriais presentes; tricobótrias não pareadas; freno curto.' },
+    { id:'coreidae', nome:'Percevejos-das-vagens', sci:'Coreidae', rar:2, peri:1, dif:2, amb:'horta, jardim', nota:'Muitas espécies têm pernas traseiras alargadas e se alimentam de seiva de frutos e vagens.', coleta:'Guarda-chuva entomológico batendo a vegetação, ou rede de varredura sobre gramíneas e arbustos.', diferencas:'Frequentemente com pernas traseiras alargadas em forma de folha, ausente em Pentatomidae.' , livro:'Búculas atingindo a inserção da antena; margem posterior do pronoto distintamente mais larga que a cabeça; tíbias sulcadas (exceto na subfamília Pseudophloeinae).' },
+    { id:'membracidae', nome:'Cigarrinhas-espinho', sci:'Membracidae', rar:3, peri:1, dif:2, amb:'jardim, mata', nota:'Tórax com projeções bizarras que imitam espinhos de planta, camuflando o inseto sobre o caule.', coleta:'Guarda-chuva entomológico batendo a vegetação, ou rede de varredura sobre gramíneas e arbustos.', diferencas:'Projeções bizarras no tórax que imitam espinhos, exclusivas dessa família entre os hemípteros.' , livro:'Trocanter e fêmur da perna anterior não fusionados; provavelmente forma clado com Aetalionidae e Melizoderidae.' },
+    { id:'cicadellidae', nome:'Cigarrinhas-verdes', sci:'Cicadellidae', rar:1, peri:1, dif:1, amb:'jardim, gramado, horta', nota:'Pequenas, saltadoras, alimentam-se de seiva; muito comuns em folhagem baixa.', coleta:'Guarda-chuva entomológico batendo a vegetação, ou rede de varredura sobre gramíneas e arbustos.', diferencas:'Corpo fino e alongado, menor e mais saltador que Membracidae.' , livro:'Tíbia posterior com cerdas grandes e conspícuas, dispostas em fileiras longitudinais; maior família de Hemiptera do Brasil.' },
+    { id:'belostomatidae', nome:'Barata-d\u2019água gigante', sci:'Belostomatidae', rar:4, peri:3, dif:3, amb:'lagoas, açudes, água doce parada', nota:'Percevejo aquático grande e predador, comum em corpos de água doce da região.', coleta:'Peneira ou rapiché em lagoas e açudes de água parada.', diferencas:'Maior percevejo aquático da lista, com pernas dianteiras robustas para capturar presas.' , livro:'Pernas posteriores com franja de cerdas; sifão respiratório curto, achatado e retrátil; cabeça estriada atrás do olho.' },
+    { id:'gerridae', nome:'Andarilhos-da-água', sci:'Gerridae', rar:2, peri:1, dif:2, amb:'lagoas, riachos, água parada', nota:'Deslizam sobre a superfície da água aproveitando a tensão superficial.', coleta:'Um potinho passado diretamente pela superfície da água costuma bastar, já que ficam sobre a lâmina d\'água.', diferencas:'Pernas muito longas para deslizar sobre a água, diferente do nado de Belostomatidae.' , livro:'Fórmula tarsal 2–2–2; tarso mediano nunca profundamente fendido ou com leque plumoso; cabeça fusionada ao pronoto.' },
+    { id:'lygaeidae', nome:'Percevejos-das-sementes', sci:'Lygaeidae', rar:2, peri:1, dif:1, amb:'jardim, área aberta, capim', nota:'Alimentam-se principalmente de sementes caídas no chão.', coleta:'Guarda-chuva entomológico batendo a vegetação, ou rede de varredura sobre gramíneas e arbustos.', diferencas:'Corpo geralmente mais estreito e discreto que Pentatomidae, associado a sementes no solo.' , livro:'Ocelos não envolvidos por um calo distinto (caráter que a separa de famílias próximas de Lygaeoidea).' },
+    { id:'miridae', nome:'Percevejos-das-plantas', sci:'Miridae', rar:1, peri:1, dif:1, amb:'jardim, horta', nota:'Uma das famílias de percevejos mais numerosas, associada a plantas cultivadas.', coleta:'Guarda-chuva entomológico batendo a vegetação, ou rede de varredura sobre gramíneas e arbustos.', diferencas:'Uma das maiores famílias de percevejos, corpo mole, sem o escudo rígido de Pentatomidae.' , livro:'Genitália masculina assimétrica; tarsos dímeros ou trímeros; ocelos presentes ou ausentes; garras tarsais às vezes com pulvilo.' },
+    { id:'tingidae', nome:'Percevejos-de-renda', sci:'Tingidae', rar:3, peri:1, dif:1, amb:'jardim, folhagem', nota:'Asas com padrão reticulado que lembram renda fina.', coleta:'Guarda-chuva entomológico batendo a vegetação, ou rede de varredura sobre gramíneas e arbustos.', diferencas:'Asas com padrão reticulado rendado, único entre os percevejos da lista.' , livro:'Pedicelo geralmente mais longo que o escapo; ocelos sempre ausentes (subfamílias Cantacaderinae e Tinginae); tarsos dímeros; genitália masculina simétrica.' },
+    { id:'cercopidae', nome:'Cigarrinhas-espumantes', sci:'Cercopidae', rar:2, peri:1, dif:2, amb:'jardim, gramado, canavial', nota:'Ninfas se protegem dentro de uma espuma branca produzida sobre as plantas.', coleta:'Procure a espuma branca característica sobre gramíneas e retire a ninfa de dentro dela com cuidado.', diferencas:'Ninfas produzem espuma protetora visível sobre a planta, hábito exclusivo dessa família.' , livro:'Olho, em vista dorsal, mais ou menos circular; cabeça mais estreita que o pronoto.' },
+    { id:'fulgoridae', nome:'Cigarrinhas-lanterna', sci:'Fulgoridae', rar:3, peri:1, dif:3, amb:'mata, jardim', nota:'Algumas espécies têm uma projeção na cabeça que lembra uma lanterna.', coleta:'Guarda-chuva entomológico batendo a vegetação, ou rede de varredura sobre gramíneas e arbustos.', diferencas:'Algumas espécies têm projeção na cabeça em formato de \'lanterna\', ausente em Cicadellidae e Cercopidae.' , livro:'Área costal da asa anterior reticulada, com várias veias transversais.' },
+    { id:'aphididae', nome:'Pulgões', sci:'Aphididae', rar:1, peri:1, dif:1, amb:'jardim, horta', nota:'Pequenos insetos sugadores de seiva que se reproduzem rapidamente em colônias.', coleta:'Guarda-chuva entomológico batendo a vegetação, ou rede de varredura sobre gramíneas e arbustos.', diferencas:'Corpo mole, minúsculo e sem asas na maioria, reproduzindo-se muito rapidamente em colônias.', livro:'Antenas das formas adultas com 5–6 artículos; asa anterior com veia estigmática (Rs) presente; sifúnculos em geral bem desenvolvidos; fêmeas partenogenéticas vivíparas sobre plantas herbáceas ou lenhosas.' },
+    { id:'pseudococcidae', nome:'Cochonilhas-algodão', sci:'Pseudococcidae', rar:1, peri:1, dif:1, amb:'jardim, plantas ornamentais', nota:'Corpo coberto por uma secreção branca e cerosa parecida com algodão.', coleta:'Guarda-chuva entomológico batendo a vegetação, ou rede de varredura sobre gramíneas e arbustos.', diferencas:'Corpo coberto por secreção branca cerosa parecida com algodão, diferente da carapaça rígida de Diaspididae.' , livro:'Fêmeas com espiráculos abdominais; sem marsúpio; cerários presentes ao menos nos lóbulos anais.' },
+    { id:'coccidae', nome:'Cochonilhas-de-carapaça-mole', sci:'Coccidae', rar:2, peri:1, dif:1, amb:'jardim, plantas', nota:'Ficam praticamente imóveis, fixadas em caules e folhas, sugando seiva.', coleta:'Guarda-chuva entomológico batendo a vegetação, ou rede de varredura sobre gramíneas e arbustos.', diferencas:'Carapaça lisa e abaulada, mais macia que a de Diaspididae.' , livro:'Placas anais mais ou menos triangulares, medianamente próximas; pernas desenvolvidas.' },
+    { id:'diaspididae', nome:'Cochonilhas-de-carapaça-dura', sci:'Diaspididae', rar:2, peri:1, dif:1, amb:'jardim, árvores frutíferas', nota:'Protegidas por uma carapaça rígida; podem causar manchas em frutos e folhas.', coleta:'Guarda-chuva entomológico batendo a vegetação, ou rede de varredura sobre gramíneas e arbustos.', diferencas:'Carapaça rígida e circular ou alongada, a mais dura entre as cochonilhas da lista.' , livro:'Fêmeas sem espiráculos abdominais; corpo coberto por um escudo formado por secreção cerosa e por uma ou duas exúvias.' },
+    { id:'aleyrodidae', nome:'Moscas-brancas', sci:'Aleyrodidae', rar:1, peri:1, dif:1, amb:'horta, jardim', nota:'Pequenas e esbranquiçadas, voam em grupo quando a planta é sacudida.', coleta:'Guarda-chuva entomológico batendo a vegetação, ou rede de varredura sobre gramíneas e arbustos.', diferencas:'Corpo e asas cobertos por pó branco ceroso, voam em grupo, ao contrário das cochonilhas sésseis.' },
+    { id:'notonectidae', nome:'Barqueiros-d\'água', sci:'Notonectidae', rar:2, peri:3, dif:2, amb:'lagoas, açudes', nota:'Nadam de costas na superfície da água; podem dar picadas dolorosas se manuseados.', coleta:'Peneira em lagoas e açudes; cuidado ao manusear, pois podem dar picadas dolorosas.', diferencas:'Nadam de costas próximo à superfície, ao contrário de Belostomatidae, que nada em posição normal.' , livro:'Pernas posteriores mais longas que as anteriores e medianas; garras pretarsais posteriores inconspícuas.' },
+    { id:'nepidae', nome:'Escorpiões-d\'água', sci:'Nepidae', rar:3, peri:3, dif:3, amb:'lagoas, água parada', nota:'Possuem um longo tubo respiratório na cauda e patas dianteiras adaptadas para capturar presas.', coleta:'Peneira em água parada, revirando vegetação submersa onde ficam à espreita.', diferencas:'Possuem um longo tubo respiratório na cauda, ausente nas outras famílias aquáticas da lista.' , livro:'Pernas posteriores com franja de cerdas; sifão respiratório filiforme, não retrátil, geralmente longo.' },
   ]},
-  { id:'orthoptera', nome:'Grilos e gafanhotos', sci:'Orthoptera', cor:'#5a6b2e', familias:[
-    { id:'gryllidae', nome:'Grilos', sci:'Gryllidae', rar:1, peri:1, dif:2, amb:'jardim, quintal, mata (noturno)', nota:'O canto noturno característico é produzido pelos machos esfregando as asas anteriores.' },
-    { id:'tettigoniidae', nome:'Esperanças', sci:'Tettigoniidae', rar:2, peri:2, dif:3, amb:'mata, jardim (noturno)', nota:'Antenas longas e finas; muitas espécies se camuflam perfeitamente como folhas verdes.' },
-    { id:'acrididae', nome:'Gafanhotos', sci:'Acrididae', rar:1, peri:1, dif:2, amb:'área aberta, capim, restinga', nota:'Antenas curtas e pernas traseiras fortes para saltos longos; ativos durante o dia.' },
-    { id:'romaleidae', nome:'Gafanhotos-gigantes', sci:'Romaleidae', rar:2, peri:1, dif:2, amb:'mata, área aberta', nota:'Espécies de maior porte entre os gafanhotos da região, algumas com cores vivas de aviso.' },
+  { id:'orthoptera', nome:'Grilos e gafanhotos', sci:'Orthoptera', cor:'#5a6b2e', chaveOrdem:'Pernas posteriores tipicamente saltatórias (fêmures hipertrofiados); asas anteriores tégminas coriáceas protegendo as posteriores membranosas plicadas em leque; órgãos estridulatórios frequentes; metamorfose paurometábola.', familias:[
+    { id:'gryllidae', nome:'Grilos', sci:'Gryllidae', rar:1, peri:1, dif:2, amb:'jardim, quintal, mata (noturno)', nota:'O canto noturno característico é produzido pelos machos esfregando as asas anteriores.', coleta:'Busca noturna com lanterna (grilos e esperanças) ou rede de varredura sobre a vegetação durante o dia (gafanhotos).', diferencas:'Antenas longas e finas como Tettigoniidae, mas corpo mais escuro e achatado, com canto mais metálico.' , livro:'Tíbia posterior sem espinhos dorsais; tarsos trímeros; cercos longos (superfamília Grylloidea).' },
+    { id:'tettigoniidae', nome:'Esperanças', sci:'Tettigoniidae', rar:2, peri:2, dif:3, amb:'mata, jardim (noturno)', nota:'Antenas longas e finas; muitas espécies se camuflam perfeitamente como folhas verdes.', coleta:'Busca noturna com lanterna (grilos e esperanças) ou rede de varredura sobre a vegetação durante o dia (gafanhotos).', diferencas:'Camuflagem foliar mais elaborada que a de Gryllidae, imitando folhas verdes ou secas.' , livro:'Tíbia anterior com ou sem tímpano (quando presente, em uma ou ambas as faces); asas em diversos graus de desenvolvimento (macrópteras, braquípteras ou ápteras), quando presentes com aparelho estridulatório; muitas espécies esverdeadas, com tégminas que mimetizam folhas (superfamília Tettigonioidea).' },
+    { id:'acrididae', nome:'Gafanhotos', sci:'Acrididae', rar:1, peri:1, dif:2, amb:'área aberta, capim, restinga', nota:'Antenas curtas e pernas traseiras fortes para saltos longos; ativos durante o dia.', coleta:'Busca noturna com lanterna (grilos e esperanças) ou rede de varredura sobre a vegetação durante o dia (gafanhotos).', diferencas:'Antenas curtas, diferente das antenas longas de grilos e esperanças.' , livro:'Mecanismo estridulatório, quando presente, do tipo fêmur/asa (superfamília Acridoidea).' },
+    { id:'romaleidae', nome:'Gafanhotos-gigantes', sci:'Romaleidae', rar:2, peri:1, dif:2, amb:'mata, área aberta', nota:'Espécies de maior porte entre os gafanhotos da região, algumas com cores vivas de aviso.', coleta:'Busca noturna com lanterna (grilos e esperanças) ou rede de varredura sobre a vegetação durante o dia (gafanhotos).', diferencas:'Porte muito maior que Acrididae, com cores de aviso vivas em algumas espécies.' , livro:'Mecanismo estridulatório, quando presente, do tipo asa/asa, atuando sobre a primeira área anal da asa (superfamília Acridoidea).' },
+    { id:'proscopiidae', nome:'Gafanhotos-graveto', sci:'Proscopiidae', rar:3, peri:1, dif:2, amb:'mata, restinga, capim', nota:'Corpo extremamente alongado, camuflado como um graveto fino entre a vegetação.', coleta:'Busca noturna com lanterna (grilos e esperanças) ou rede de varredura sobre a vegetação durante o dia (gafanhotos).', diferencas:'Corpo extremamente alongado como um graveto, formato único entre os ortópteros da lista.' , livro:'Ápteros; cabeça cônica e alongada; corpo em formato geral de graveto (superfamília Proscopioidea).' },
+    { id:'gryllotalpidae', nome:'Grilos-toupeira', sci:'Gryllotalpidae', rar:3, peri:1, dif:3, amb:'solo úmido, jardim, horta', nota:'Patas dianteiras adaptadas para escavar, semelhantes às de uma toupeira.', coleta:'Busca noturna com lanterna (grilos e esperanças) ou rede de varredura sobre a vegetação durante o dia (gafanhotos).', diferencas:'Patas dianteiras adaptadas para escavação, ausentes em todas as outras famílias de Orthoptera.' , livro:'Pernas anteriores fossoriais, com projeções pontiagudas (dáctilos) adaptadas à escavação; fêmeas sem ovipositor externo.' },
+    { id:'trigonidiidae', nome:'Grilos-das-plantas', sci:'Trigonidiidae', rar:3, peri:1, dif:2, amb:'jardim, folhagem', nota:'Grilos pequenos que vivem sobre a vegetação, em vez de no solo.', coleta:'Busca noturna com lanterna (grilos e esperanças) ou rede de varredura sobre a vegetação durante o dia (gafanhotos).', diferencas:'Grilos pequenos que vivem sobre a vegetação, diferente do hábito de solo de Gryllidae.' , livro:'Tamanho reduzido (menor que 15 mm); esporões subapicais da tíbia posterior longos e finos, geralmente sem espinhos, dispostos em três (raramente quatro) internos e três (raramente quatro) externos; esporões apicais interno-dorsal e mediano muito mais longos que o ventral (3× ou mais).' },
+    { id:'mogoplistidae', nome:'Grilos-escamados', sci:'Mogoplistidae', rar:4, peri:1, dif:3, amb:'folhiço, sob troncos', nota:'Corpo coberto por pequenas escamas que se soltam facilmente ao toque.', coleta:'Busca noturna com lanterna (grilos e esperanças) ou rede de varredura sobre a vegetação durante o dia (gafanhotos).', diferencas:'Corpo coberto por escamas destacáveis, característica exclusiva dessa família.' , livro:'Esporões subapicais ausentes na tíbia posterior; espinhos presentes na tíbia posterior; corpo frequentemente coberto por escamas destacáveis.' },
+    { id:'tetrigidae', nome:'Gafanhotos-pigmeus', sci:'Tetrigidae', rar:3, peri:1, dif:2, amb:'solo úmido, beira de lagoas', nota:'Pequeno porte e pronoto alongado cobrindo parte do abdômen; ativos perto de água.', coleta:'Busca noturna com lanterna (grilos e esperanças) ou rede de varredura sobre a vegetação durante o dia (gafanhotos).', diferencas:'Pronoto alongado cobrindo grande parte do abdômen, diferente do formato de Acrididae.' , livro:'Tarsos posteriores trímeros; pronoto prolongado posteriormente, geralmente cobrindo grande parte do abdômen (superfamília Tetrigoidea).' },
   ]},
-  { id:'odonata', nome:'Libélulas', sci:'Odonata', cor:'#1f5a63', familias:[
-    { id:'libellulidae', nome:'Libélulas comuns', sci:'Libellulidae', rar:1, peri:1, dif:4, amb:'lagoas, mangue, açudes', nota:'Família mais numerosa de libélulas, com pouso frequente em galhos e fios perto da água.' },
-    { id:'coenagrionidae', nome:'Donzelinhas', sci:'Coenagrionidae', rar:2, peri:1, dif:3, amb:'lagoas, riachos, água parada', nota:'Corpo fino e voo delicado; pousam com as asas fechadas ao longo do corpo.' },
-    { id:'aeshnidae', nome:'Libélulas-imperadoras', sci:'Aeshnidae', rar:3, peri:1, dif:5, amb:'lagoas, açudes, mangue', nota:'Libélulas grandes e de voo veloz, patrulham territórios ao redor de corpos de água.' },
+  { id:'odonata', nome:'Libélulas', sci:'Odonata', cor:'#1f5a63', chaveOrdem:'Dois pares de asas membranosas subiguais com venação reticulada densa, não flexionáveis sobre o abdômen em repouso; aparelho bucal mastigador; olhos compostos hipertrofiados; ninfas aquáticas com máscara labial protrátil; metamorfose hemimetábola incompleta.', familias:[
+    { id:'libellulidae', nome:'Libélulas comuns', sci:'Libellulidae', rar:1, peri:1, dif:4, amb:'lagoas, mangue, açudes', nota:'Família mais numerosa de libélulas, com pouso frequente em galhos e fios perto da água.', coleta:'Rede entomológica de cabo longo, aproximando-se devagar pela margem de lagoas e riachos; indivíduos pousados são mais fáceis de capturar do que em voo.', diferencas:'Pousam com as asas abertas horizontalmente, diferente das donzelinhas, que fecham as asas.' , livro:'Machos com a superfície ventral das tíbias não projetada em forma de quilha; triângulo anal indistinto na asa posterior; segundo segmento abdominal (S2) carenado, mas sem protuberâncias em forma de aurículas.' },
+    { id:'coenagrionidae', nome:'Donzelinhas', sci:'Coenagrionidae', rar:2, peri:1, dif:3, amb:'lagoas, riachos, água parada', nota:'Corpo fino e voo delicado; pousam com as asas fechadas ao longo do corpo.', coleta:'Rede entomológica de cabo longo, aproximando-se devagar pela margem de lagoas e riachos; indivíduos pousados são mais fáceis de capturar do que em voo.', diferencas:'Corpo muito fino e voo delicado; pousam com as asas fechadas ao longo do corpo.' , livro:'Chave com múltiplos caracteres de venação alar (nó costal, pseudostigma, forma do quadrângulo); grupo heterogêneo que inclui, nesta obra, a maioria da subfamília Pseudostigmatinae (libélulas-helicóptero). Fêmeas com valvas do ovipositor reduzidas a uma placa subgenital (couplet completo requer consulta à chave ilustrada do capítulo 15).' },
+    { id:'aeshnidae', nome:'Libélulas-imperadoras', sci:'Aeshnidae', rar:3, peri:1, dif:5, amb:'lagoas, açudes, mangue', nota:'Libélulas grandes e de voo veloz, patrulham territórios ao redor de corpos de água.', coleta:'Rede entomológica de cabo longo, aproximando-se devagar pela margem de lagoas e riachos; indivíduos pousados são mais fáceis de capturar do que em voo.', diferencas:'Maior porte e voo mais veloz e sustentado, patrulhando território, diferente de Libellulidae.' , livro:'Ápice da asa levemente a extremamente reticulado, com veias em níveis distintos de espessura, formando uma área multicelular difusa (pseudostigma) no lugar de um pterostigma verdadeiro; nó costal distintamente basal (a menos de 0,24 do comprimento da asa); fêmeas com valvas do ovipositor bem desenvolvidas e distintas.' },
+    { id:'gomphidae', nome:'Libélulas-do-riacho', sci:'Gomphidae', rar:3, peri:1, dif:4, amb:'riachos, mangue', nota:'Olhos bem separados na cabeça; ninfas vivem enterradas no sedimento de riachos.', coleta:'Rede entomológica de cabo longo, aproximando-se devagar pela margem de lagoas e riachos; indivíduos pousados são mais fáceis de capturar do que em voo.', diferencas:'Olhos bem separados na cabeça, diferente da maioria das outras libélulas verdadeiras.' },
+    { id:'calopterygidae', nome:'Libélulas-metálicas-de-riacho', sci:'Calopterygidae', rar:3, peri:1, dif:3, amb:'riachos, mata ciliar', nota:'Asas coloridas e corpo com brilho metálico; voo lento e ondulado perto da água corrente.', coleta:'Rede entomológica de cabo longo, aproximando-se devagar pela margem de lagoas e riachos; indivíduos pousados são mais fáceis de capturar do que em voo.', diferencas:'Asas coloridas e corpo metálico, voo lento e ondulado, diferente do voo reto de Coenagrionidae.' },
+    { id:'protoneuridae', nome:'Donzelinhas-finas', sci:'Protoneuridae', rar:4, peri:1, dif:4, amb:'riachos sombreados de mata', nota:'Corpo muito fino e discreto, difícil de avistar na vegetação ao longo de riachos.', coleta:'Rede entomológica de cabo longo, aproximando-se devagar pela margem de lagoas e riachos; indivíduos pousados são mais fáceis de capturar do que em voo.', diferencas:'Corpo extremamente fino, ainda mais discreto que Coenagrionidae.' },
+    { id:'lestidae', nome:'Donzelinhas-espalhadas', sci:'Lestidae', rar:2, peri:1, dif:3, amb:'lagoas, brejos', nota:'Diferente de outras donzelinhas, pousam com as asas parcialmente abertas.', coleta:'Rede entomológica de cabo longo, aproximando-se devagar pela margem de lagoas e riachos; indivíduos pousados são mais fáceis de capturar do que em voo.', diferencas:'Pousam com as asas parcialmente abertas, diferente das demais donzelinhas, que as fecham completamente.' , livro:'Veias pós-nodais da primeira série (entre margem costal e RA) e da segunda série (entre RA e RP) alinhadas entre si; pterostigma curto, com a margem costal até 3× mais longa que a margem distal.' },
   ]},
-  { id:'blattodea', nome:'Baratas e cupins', sci:'Blattodea', cor:'#4a3a2a', familias:[
-    { id:'blattidae', nome:'Baratas comuns', sci:'Blattidae', rar:1, peri:1, dif:2, amb:'área urbana, mata, folhiço', nota:'Incluem espécies domésticas e outras silvestres que vivem no folhiço da mata.' },
-    { id:'blaberidae', nome:'Baratas-do-mato', sci:'Blaberidae', rar:2, peri:1, dif:2, amb:'mata, folhiço', nota:'Grupo diverso de baratas silvestres, geralmente maiores e menos associadas a residências.' },
-    { id:'termitidae', nome:'Cupins', sci:'Termitidae', rar:1, peri:1, dif:1, amb:'mata, área urbana, madeira', nota:'Vivem em colônias sociais complexas; constroem ninhos (cupinzeiros) visíveis em árvores e no solo.' },
+  { id:'blattodea', nome:'Baratas e cupins', sci:'Blattodea', cor:'#4a3a2a', chaveOrdem:'Corpo dorsoventralmente achatado; pronoto expandido cobrindo parcialmente a cabeça; cercos multissegmentados; tégminas coriáceas sobrepostas; metamorfose paurometábola; inclui a linhagem eussocial de Isoptera (cupins).', familias:[
+    { id:'blattidae', nome:'Baratas comuns', sci:'Blattidae', rar:1, peri:1, dif:2, amb:'área urbana, mata, folhiço', nota:'Incluem espécies domésticas e outras silvestres que vivem no folhiço da mata.', coleta:'Busca noturna com lanterna sob troncos, folhiço e frestas; iscas com pão ou fruta em recipiente de borda lisa funcionam bem.', diferencas:'Porte maior que Blattellidae, geralmente de cor mais escura e uniforme.', livro:'Área anal da asa não plissada em repouso, dobrada sobre o remígio; coloração escura a castanho-ferruginosa; porte médio a grande (10–50 mm); placa subgenital da fêmea com duas válvulas proeminentes.' },
+    { id:'blaberidae', nome:'Baratas-do-mato', sci:'Blaberidae', rar:2, peri:1, dif:2, amb:'mata, folhiço', nota:'Grupo diverso de baratas silvestres, geralmente maiores e menos associadas a residências.', coleta:'Busca noturna com lanterna sob troncos, folhiço e frestas; iscas com pão ou fruta em recipiente de borda lisa funcionam bem.', diferencas:'Geralmente maiores e associadas à mata, diferente do ambiente urbano de Blattellidae.', livro:'Fêmea com grande bolsa incubadora ventral, onde a ooteca é incubada após rotação e retração; porte médio a muito grande (15–90 mm).' },
+    { id:'termitidae', nome:'Cupins', sci:'Termitidae', rar:1, peri:1, dif:1, amb:'mata, área urbana, madeira', nota:'Vivem em colônias sociais complexas; constroem ninhos (cupinzeiros) visíveis em árvores e no solo.', coleta:'Abra cuidadosamente um cupinzeiro ou pedaço de madeira infestada para coletar operários e soldados; evite destruir a colônia inteira.', diferencas:'Família de cupins mais diversa, com castas bem diferenciadas e cupinzeiros visíveis.', livro:'Escama alar anterior não recobre a posterior; mandíbulas variáveis (quando o dente apical é grande, a placa molar é larga, côncava e lisa, sem ranhuras); asas não reticuladas; soldados com pronoto em sela, com lobo anterior bem definido. Família de cupins mais diversa e comum no Brasil.' },
+    { id:'blattellidae', nome:'Baratas-pequenas', sci:'Blattellidae', rar:1, peri:1, dif:1, amb:'área urbana, cozinha', nota:'Inclui espécies pequenas comumente encontradas dentro de residências.', coleta:'Busca noturna com lanterna sob troncos, folhiço e frestas; iscas com pão ou fruta em recipiente de borda lisa funcionam bem.', diferencas:'Menores e mais claras que Blattidae, comuns dentro de casa.', livro:'Nesta obra tratada como subfamília Blattellinae dentro de Ectobiidae (não como família Blattellidae stricto sensu); genitália do macho com esclerito L2d em forma de gancho no lado esquerdo; ooteca rotacionada antes da postura, com quilha lateral.' },
+    { id:'rhinotermitidae', nome:'Cupins-subterrâneos', sci:'Rhinotermitidae', rar:1, peri:1, dif:1, amb:'solo, madeira, área urbana', nota:'Constroem galerias subterrâneas e são uma das principais causas de dano a estruturas de madeira.', coleta:'Procure em galerias subterrâneas de barro perto de madeira em contato com o solo.', diferencas:'Cupins que vivem em contato com o solo através de galerias, diferente de Kalotermitidae.', livro:'Fontanela presente; mandíbula esquerda do operário com três dentes marginais; grupo de cupim subterrâneo muito comum no Brasil.' },
+    { id:'kalotermitidae', nome:'Cupins-de-madeira-seca', sci:'Kalotermitidae', rar:2, peri:1, dif:1, amb:'madeira seca, móveis, árvores', nota:'Vivem diretamente dentro da madeira seca que consomem, sem contato com o solo.', coleta:'Quebre pequenos pedaços de madeira seca seguindo galerias internas visíveis.', diferencas:'Vivem inteiramente dentro da madeira seca, sem contato com o solo, diferente de Rhinotermitidae.', livro:'Imagos com esporões apicais da tíbia 3:3:3 e pernas curtas e grossas; castas ápteras (soldados/operários) com fontanela ausente. Espécies xilófagas que nunca saem da madeira, sem contato com o solo.' },
   ]},
-  { id:'mantodea', nome:'Louva-a-deus', sci:'Mantodea', cor:'#3a6b3a', familias:[
-    { id:'mantidae', nome:'Louva-a-deus', sci:'Mantidae', rar:2, peri:2, dif:2, amb:'jardim, mata, restinga', nota:'Predadores de emboscada com pernas dianteiras adaptadas para capturar presas; excelente camuflagem entre folhas.' },
+  { id:'mantodea', nome:'Louva-a-deus', sci:'Mantodea', cor:'#3a6b3a', chaveOrdem:'Pernas anteriores raptoriais, com fêmur e tíbia armados de espinhos em pinça; protórax alongado; cabeça triangular móvel com visão binocular; metamorfose paurometábola.', familias:[
+    { id:'mantidae', nome:'Louva-a-deus', sci:'Mantidae', rar:2, peri:2, dif:2, amb:'jardim, mata, restinga', nota:'Predadores de emboscada com pernas dianteiras adaptadas para capturar presas; excelente camuflagem entre folhas.', coleta:'Busca visual cuidadosa entre folhagem verde ou seca, de dia ou à noite com lanterna, procurando por movimento sutil.', diferencas:'Corpo tipicamente verde ou marrom alongado, sem os espinhos elaborados de Acanthopidae.', livro:'Olhos globosos, às vezes cônicos, mas nunca pontiagudos; corpo geralmente de coloração verde ou castanha, sem o aspecto de folha/graveto seco de Acanthopidae.' },
+    { id:'thespidae', nome:'Louva-a-deus-de-galho', sci:'Thespidae', rar:3, peri:2, dif:2, amb:'mata, arbustos', nota:'Corpo fino e alongado, camuflado entre galhos finos.', coleta:'Busca visual cuidadosa entre folhagem verde ou seca, de dia ou à noite com lanterna, procurando por movimento sutil.', diferencas:'Corpo mais fino que Mantidae, camuflado entre galhos finos.' },
+    { id:'liturgusidae', nome:'Louva-a-deus-de-casca', sci:'Liturgusidae', rar:4, peri:2, dif:3, amb:'tronco de árvores, mata', nota:'Corpo achatado, perfeitamente camuflado sobre a casca de árvores.', coleta:'Busca visual cuidadosa entre folhagem verde ou seca, de dia ou à noite com lanterna, procurando por movimento sutil.', diferencas:'Corpo achatado, especializado em viver sobre casca de árvores, diferente do hábito em folhagem das demais.' },
+    { id:'acanthopidae', nome:'Louva-a-deus-espinhoso', sci:'Acanthopidae', rar:4, peri:2, dif:3, amb:'mata, folhagem densa', nota:'Possui projeções espinhosas no corpo que ajudam na camuflagem entre folhas secas.', coleta:'Busca visual cuidadosa entre folhagem verde ou seca, de dia ou à noite com lanterna, procurando por movimento sutil.', diferencas:'Projeções espinhosas elaboradas no corpo, ausentes nas outras famílias de louva-a-deus da lista.', livro:'Olhos pontiagudos ou com processo cônico apical; corpo com aparência de graveto seco, folha seca ou em decomposição; comprimento corporal superior a 30 mm.' },
   ]},
-  { id:'dermaptera', nome:'Tesourinhas', sci:'Dermaptera', cor:'#6b4a2a', familias:[
-    { id:'forficulidae', nome:'Tesourinhas', sci:'Forficulidae', rar:1, peri:1, dif:1, amb:'jardim, sob pedras e troncos', nota:'Reconhecidas pelo par de "pinças" no fim do abdômen, usadas em defesa e captura de presas pequenas.' },
+  { id:'dermaptera', nome:'Tesourinhas', sci:'Dermaptera', cor:'#6b4a2a', chaveOrdem:'Cercos modificados em fórceps esclerotizados no ápice abdominal; tégminas curtas quando presentes, cobrindo asas posteriores pregueadas radialmente; metamorfose paurometábola.', familias:[
+    { id:'forficulidae', nome:'Tesourinhas', sci:'Forficulidae', rar:1, peri:1, dif:1, amb:'jardim, sob pedras e troncos', nota:'Reconhecidas pelo par de "pinças" no fim do abdômen, usadas em defesa e captura de presas pequenas.', coleta:'Procure sob pedras, troncos caídos, cascas soltas e entulho úmido durante o dia; são mais ativas à noite.', diferencas:'Pinças (cercos) geralmente simétricas e curvas; a família mais comum em jardins.', livro:'Tarsômero II cordiforme (em forma de coração) — apomorfia que confirma a monofilia do grupo; morfologia externa variável, coloração acastanhada ou não; cercos frequentemente estreitados na base.' },
+    { id:'labiduridae', nome:'Tesourinhas-de-praia', sci:'Labiduridae', rar:2, peri:1, dif:1, amb:'solo arenoso, praia, restinga', nota:'Tesourinhas maiores, comuns em solo arenoso perto da faixa de praia.', coleta:'Procure sob pedras, troncos caídos, cascas soltas e entulho úmido durante o dia; são mais ativas à noite.', diferencas:'Maior porte entre as tesourinhas da região, associada a solo arenoso de praia.', livro:'Dermápteros robustos e de grande porte (inclui a maior tesourinha conhecida, com até 85 mm de comprimento); dois lobos genitais, um anterior e outro posterior, cada um com uma virga.' },
+    { id:'anisolabididae', nome:'Tesourinhas-de-solo', sci:'Anisolabididae', rar:2, peri:1, dif:1, amb:'jardim, sob pedras', nota:'Vivem escondidas sob pedras, troncos e entulho úmido.', coleta:'Procure sob pedras, troncos caídos, cascas soltas e entulho úmido durante o dia; são mais ativas à noite.', diferencas:'Corpo mais escuro e achatado que Forficulidae, tipicamente sob pedras.', livro:'Pescoço do tipo forficuloideo (esclerito cervical anterior mais curto e estreito que o posterior); tégmina ausente ou reduzida. Cercos assimétricos, de comprimentos diferentes, sempre no mínimo três vezes mais curtos que o abdômen, pouco curvados nos terços basal e medial e conspicuamente curvados no terço apical; frequentemente com os dois pares de asas reduzidos; hábito predominantemente edáfico (bem amostrada em armadilhas pitfall).' },
+    { id:'spongiphoridae', nome:'Tesourinhas-pequenas', sci:'Spongiphoridae', rar:2, peri:1, dif:1, amb:'jardim, folhiço', nota:'Espécies de menor porte entre as tesourinhas da região.', coleta:'Procure sob pedras, troncos caídos, cascas soltas e entulho úmido durante o dia; são mais ativas à noite.', diferencas:'Menor porte entre as tesourinhas listadas.', livro:'Tarsômero II semielipsoide (melhor observado em vista ventral).' },
   ]},
-  { id:'phasmatodea', nome:'Bicho-pau', sci:'Phasmatodea', cor:'#3a5a3a', familias:[
-    { id:'phasmatidae', nome:'Bicho-pau', sci:'Phasmatidae', rar:4, peri:1, dif:2, amb:'mata, jardim com arbustos', nota:'Mestres da camuflagem, imitando gravetos ou folhas para escapar de predadores.' },
+  { id:'phasmatodea', nome:'Bicho-pau', sci:'Phasmatodea', cor:'#3a5a3a', chaveOrdem:'Mimetismo morfológico de ramos ou folhas; pernas longas e delgadas; asas reduzidas ou ausentes na maioria dos táxons; metamorfose paurometábola.', familias:[
+    { id:'phasmatidae', nome:'Bicho-pau', sci:'Phasmatidae', rar:4, peri:1, dif:2, amb:'mata, jardim com arbustos', nota:'Mestres da camuflagem, imitando gravetos ou folhas para escapar de predadores.', coleta:'Busca visual noturna com lanterna em arbustos e árvores, procurando por \'gravetos\' ou \'folhas\' fora do padrão da vegetação.', diferencas:'Corpo em formato de graveto liso, sem os mecanismos de defesa química de Pseudophasmatidae.' },
+    { id:'heteronemiidae', nome:'Bicho-pau-comum', sci:'Heteronemiidae', rar:3, peri:1, dif:2, amb:'mata, jardim com arbustos', nota:'Corpo alongado em formato de graveto, um dos bichos-pau mais frequentemente avistados.', coleta:'Busca visual noturna com lanterna em arbustos e árvores, procurando por \'gravetos\' ou \'folhas\' fora do padrão da vegetação.', diferencas:'Muito semelhante a Phasmatidae; um dos bichos-pau mais comumente avistados na região.' },
+    { id:'pseudophasmatidae', nome:'Bicho-pau-que-esguicha', sci:'Pseudophasmatidae', rar:4, peri:3, dif:2, amb:'mata', nota:'Quando ameaçado, libera um jato de secreção defensiva que pode irritar olhos e pele.', coleta:'Busca visual noturna com lanterna em arbustos e árvores, procurando por \'gravetos\' ou \'folhas\' fora do padrão da vegetação.', diferencas:'Capaz de esguichar secreção defensiva irritante quando ameaçado, mecanismo ausente nas outras famílias.' },
   ]},
-  { id:'neuroptera', nome:'Formigas-leão e crisopídeos', sci:'Neuroptera', cor:'#5a4a2a', familias:[
-    { id:'myrmeleontidae', nome:'Formigas-leão', sci:'Myrmeleontidae', rar:3, peri:1, dif:3, amb:'solo arenoso, restinga, dunas', nota:'Larvas cavam pequenas covas em areia fina para capturar formigas que caem lá dentro — comuns nas dunas da região.' },
-    { id:'chrysopidae', nome:'Crisopídeos (olhos-de-ouro)', sci:'Chrysopidae', rar:2, peri:1, dif:2, amb:'jardim, horta', nota:'Adultos de asas verdes translúcidas; larvas são vorazes predadoras de pulgões.' },
+  { id:'neuroptera', nome:'Formigas-leão e crisopídeos', sci:'Neuroptera', cor:'#5a4a2a', chaveOrdem:'Dois pares de asas membranosas subiguais com venação reticulada densa; aparelho bucal mastigador; metamorfose holometábola, com larvas campodeiformes predadoras de mandíbulas sugadoras.', familias:[
+    { id:'myrmeleontidae', nome:'Formigas-leão', sci:'Myrmeleontidae', rar:3, peri:1, dif:3, amb:'solo arenoso, restinga, dunas', nota:'Larvas cavam pequenas covas em areia fina para capturar formigas que caem lá dentro — comuns nas dunas da região.', coleta:'Procure as pequenas covas cônicas em areia fina ou solo de dunas; a larva fica enterrada no fundo esperando presas cair.', diferencas:'Larvas ficam enterradas em covas de areia; adultos lembram libélulas de voo fraco.' , livro:'Antena clavada ou capitada; abdômen longo e estreito (assemelham-se superficialmente a Odonata). Classificação atual inclui, como subfamília Ascalaphinae, as espécies antes tratadas na família separada Ascalaphidae (Machado et al. 2019).' },
+    { id:'chrysopidae', nome:'Crisopídeos (olhos-de-ouro)', sci:'Chrysopidae', rar:2, peri:1, dif:2, amb:'jardim, horta', nota:'Adultos de asas verdes translúcidas; larvas são vorazes predadoras de pulgões.', coleta:'Armadilha luminosa (lençol iluminado) funciona bem à noite; durante o dia, procure sobre folhagem próxima a colônias de pulgões.', diferencas:'Asas verdes translúcidas, mais comuns durante o dia sobre plantas com pulgões.' , livro:'Perna anterior cursorial; asa anterior com um único ramo de RP partindo da veia R; ocelos geralmente ausentes; fêmea sem ovipositor externo desenvolvido.' },
+    { id:'ascalaphidae', nome:'Falsas-libélulas', sci:'Ascalaphidae', rar:4, peri:1, dif:4, amb:'área aberta, restinga', nota:'Antenas longas em forma de clava; voo rápido, ativo ao entardecer.', coleta:'Armadilha luminosa (lençol iluminado) funciona bem à noite; durante o dia, procure sobre folhagem próxima a colônias de pulgões.', diferencas:'Antenas longas em forma de clava, diferente das antenas filiformes de Chrysopidae e Myrmeleontidae.' , livro:'Nesta obra, tratada como subfamília Ascalaphinae dentro de Myrmeleontidae (não mais reconhecida como família separada desde Machado et al. 2019): tarso anterior com arólio e duas garras; pronoto pouco mais longo que largo.' },
+    { id:'hemerobiidae', nome:'Crisopídeos-pardos', sci:'Hemerobiidae', rar:3, peri:1, dif:2, amb:'jardim, mata', nota:'Parecidos com os crisopídeos verdes, porém de coloração parda e menores.', coleta:'Armadilha luminosa (lençol iluminado) funciona bem à noite; durante o dia, procure sobre folhagem próxima a colônias de pulgões.', diferencas:'Muito parecidos com Chrysopidae, porém de coloração parda em vez de verde.' , livro:'Perna anterior cursorial (não raptorial); asa anterior com dois ou mais ramos da veia RP partindo independentemente da veia R.' },
+    { id:'mantispidae', nome:'Louva-a-deus-falso', sci:'Mantispidae', rar:4, peri:1, dif:3, amb:'jardim, mata', nota:'Pernas dianteiras raptoriais que imitam as de um louva-a-deus, mas pertence a outra ordem.', coleta:'Armadilha luminosa (lençol iluminado) funciona bem à noite; durante o dia, procure sobre folhagem próxima a colônias de pulgões.', diferencas:'Pernas dianteiras raptoriais como um louva-a-deus em miniatura, exclusivo entre os neurópteros.' , livro:'Perna anterior raptorial; pronoto muito mais longo que largo, maior que o meso e metanoto juntos (assemelham-se superficialmente a Mantodea); tarso anterior sem processo dentiforme no ápice do tarsômero basal.' },
+  ]},
+  { id:'zygentoma', nome:'Traças-de-prata', sci:'Zygentoma', cor:'#6b6b4a', chaveOrdem:'Ápteros em todos os estágios; corpo recoberto por escamas; três filamentos caudais (par de cercos e apêndice mediano); ametabolia — desenvolvimento direto, sem metamorfose.', familias:[
+    { id:'lepismatidae', nome:'Traças-de-prata', sci:'Lepismatidae', rar:1, peri:1, dif:1, amb:'área urbana, dentro de casas, livros e papéis', nota:'Corpo prateado e achatado, movimenta-se em ziguezague rápido; comum em ambientes úmidos e escuros de casas.', coleta:'Procure em locais escuros e úmidos dentro de casa (atrás de livros, papéis, rodapés) à noite com lanterna; captura suave com um pote é mais eficaz que perseguição.', diferencas:'Corpo prateado e escamoso, associado a ambientes domésticos, diferente do hábito mais silvestre de Nicoletiidae.', livro:'Olhos compostos presentes; tegumento revestido por escamas, em geral pigmentadas (castanhas a acinzentadas, com reflexo prateado).' },
+    { id:'nicoletiidae', nome:'Traças-de-caverna-e-solo', sci:'Nicoletiidae', rar:4, peri:1, dif:2, amb:'solo, ninhos de cupins e formigas, cavernas', nota:'Sem escamas prateadas como as traças comuns; vivem em ambientes escuros e úmidos, às vezes dentro de ninhos de outros insetos.', coleta:'Procure em locais escuros e úmidos dentro de casa (atrás de livros, papéis, rodapés) à noite com lanterna; captura suave com um pote é mais eficaz que perseguição.', diferencas:'Sem as escamas prateadas típicas de Lepismatidae; vive associada a solo e ninhos de outros insetos.', livro:'Olhos compostos ausentes; tegumento esbranquiçado ou dourado, com ou sem escamas.' },
+  ]},
+  { id:'trichoptera', nome:'Tricópteros', sci:'Trichoptera', cor:'#2e5a6b', chaveOrdem:'Asas recobertas por pelos (não escamas, diferindo de Lepidoptera); aparelho bucal reduzido nos adultos; larvas aquáticas, muitas construtoras de estojos de detritos ou seda; metamorfose holometábola.', familias:[
+    { id:'hydropsychidae', nome:'Tricópteros-de-rede', sci:'Hydropsychidae', rar:3, peri:1, dif:3, amb:'riachos, água corrente', nota:'Larvas aquáticas constroem redes de seda para filtrar partículas de alimento da correnteza.', coleta:'As larvas aquáticas são mais fáceis de coletar que os adultos: use peneira em riachos de água corrente, revirando pedras e folhas submersas.', diferencas:'Larvas constroem redes fixas de captura, diferente do estojo móvel de Leptoceridae.', livro:'Asa anterior com veia R2+3 bifurcada; corpo maior que 5 mm; tubérculos cerdosos do mesoscuto ausentes; tubérculo cerdoso do mesoscutelo único; esporões tibiais 0–2:2–4:2–4; corpo achatado dorso-ventralmente, usualmente com padrões de cores nas asas.' },
+    { id:'hydroptilidae', nome:'Tricópteros-microcaddis', sci:'Hydroptilidae', rar:4, peri:1, dif:4, amb:'riachos, lagoas', nota:'Espécies minúsculas entre os tricópteros, difíceis de notar a olho nu.', coleta:'As larvas aquáticas são mais fáceis de coletar que os adultos: use peneira em riachos de água corrente, revirando pedras e folhas submersas.', diferencas:'Menor porte entre os tricópteros da lista, quase microscópicos.', livro:'Mesoscutelo triangular, achatado, com margem posterior vertical; corpo com menos de 5 mm; mesoscuto sem tubérculos cerdosos; tubérculos do mesoscutelo formando uma quilha vertical; asas estreitas, com margem distal afilada, venação reduzida e franja de cerdas na margem; esporões tibiais 0–1:2–3:3–4.' },
+    { id:'leptoceridae', nome:'Tricópteros-de-estojo-longo', sci:'Leptoceridae', rar:3, peri:1, dif:3, amb:'lagoas, riachos', nota:'Larvas constroem estojos alongados de detritos ou grãos de areia para se proteger.', coleta:'As larvas aquáticas são mais fáceis de coletar que os adultos: use peneira em riachos de água corrente, revirando pedras e folhas submersas.', diferencas:'Larvas carregam um estojo alongado móvel, ao contrário das redes fixas de Hydropsychidae.' },
+    { id:'philopotamidae', nome:'Tricópteros-de-rede-fina', sci:'Philopotamidae', rar:4, peri:1, dif:4, amb:'riachos limpos de mata', nota:'Constroem redes finas em forma de bolsa para capturar partículas na água corrente.', coleta:'As larvas aquáticas são mais fáceis de coletar que os adultos: use peneira em riachos de água corrente, revirando pedras e folhas submersas.', diferencas:'Constrói redes em formato de bolsa muito fina, diferente das redes de Hydropsychidae.', livro:'Ocelos presentes; 5º palpômero maxilar 2–3× mais longo que o 4º, usualmente flexível, com estrias aneladas; 2º palpômero com escova de cerdas na margem interna; mesoscuto sem tubérculos; tubérculos cerdosos do mesoscutelo pareados.' },
+    { id:'polycentropodidae', nome:'Tricópteros-caçadores', sci:'Polycentropodidae', rar:4, peri:1, dif:4, amb:'riachos, água corrente', nota:'Larvas predadoras que usam redes de seda para capturar pequenas presas.', coleta:'As larvas aquáticas são mais fáceis de coletar que os adultos: use peneira em riachos de água corrente, revirando pedras e folhas submersas.', diferencas:'Larvas predadoras ativas que usam a rede para capturar presas, não apenas filtrar partículas.' },
+  ]},
+  { id:'ephemeroptera', nome:'Efeméras', sci:'Ephemeroptera', cor:'#5a7a8f', chaveOrdem:'Asas posteriores reduzidas ou ausentes; adultos com 2–3 filamentos caudais longos; única ordem com estágio subimago alado precedendo o adulto definitivo; ninfas aquáticas; metamorfose hemimetábola.', familias:[
+    { id:'baetidae', nome:'Efeméras-pequenas', sci:'Baetidae', rar:2, peri:1, dif:3, amb:'riachos, lagoas', nota:'Adultos vivem poucas horas ou dias; ninfas aquáticas indicam boa qualidade da água.', coleta:'Procure as ninfas aquáticas sob pedras em riachos usando uma peneira; os adultos vivem poucas horas e são vistos em enxames ao entardecer.', diferencas:'Ninfas ágeis e nadadoras, menores que Leptophlebiidae.', livro:'Ninfas com brânquias abdominais não operculares (segmentos I–VII), sem recobrir os pares subsequentes; adultos com veias intercalares numerosas na asa anterior.' },
+    { id:'caenidae', nome:'Efeméras-de-cauda-curta', sci:'Caenidae', rar:3, peri:1, dif:3, amb:'lagoas, água parada', nota:'Diferem de outras efeméras por terem apenas duas caudas filamentares bem curtas.', coleta:'Procure as ninfas aquáticas sob pedras em riachos usando uma peneira; os adultos vivem poucas horas e são vistos em enxames ao entardecer.', diferencas:'Apenas duas caudas filamentares curtas, diferente das três longas caudas da maioria das outras efeméras.', livro:'Ninfas com brânquias do 2º segmento abdominal operculares, unidas por quase toda a margem interna, com marcação em \'Y\', recobrindo os pares subsequentes.' },
+    { id:'leptophlebiidae', nome:'Efeméras-de-mata-ciliar', sci:'Leptophlebiidae', rar:4, peri:1, dif:4, amb:'riachos de mata', nota:'Ninfas vivem entre folhas caídas em riachos sombreados por mata preservada.', coleta:'Procure as ninfas aquáticas sob pedras em riachos usando uma peneira; os adultos vivem poucas horas e são vistos em enxames ao entardecer.', diferencas:'Ninfas vivem entre folhas caídas em riachos de mata, com brânquias foliáceas características.', livro:'Ninfas com brânquias abdominais bifurcadas ou lamelares dispostas lateralmente, sem opérculo cobrindo os pares seguintes.' },
+    { id:'polymitarcyidae', nome:'Efeméras-escavadoras', sci:'Polymitarcyidae', rar:4, peri:1, dif:4, amb:'margens de rios e lagoas', nota:'Ninfas escavam túneis em sedimentos macios nas margens de corpos de água.', coleta:'Procure as ninfas aquáticas sob pedras em riachos usando uma peneira; os adultos vivem poucas horas e são vistos em enxames ao entardecer.', diferencas:'Ninfas escavadoras que vivem enterradas em sedimento, diferente do hábito sobre pedras das demais.', livro:'Adultos com pernas média e posterior atrofiadas, não funcionais; ninfas fossoriais, com pernas anteriores escavadoras.' },
+  ]},
+  { id:'plecoptera', nome:'Plecópteros', sci:'Plecoptera', cor:'#3a5a4a', chaveOrdem:'Dois pares de asas membranosas dobradas planas sobre o abdômen em repouso; cercos longos multissegmentados; ninfas aquáticas com brânquias traqueais, sensíveis a poluição orgânica (bioindicadoras); metamorfose hemimetábola.', familias:[
+    { id:'perlidae', nome:'Moscas-de-pedra-comuns', sci:'Perlidae', rar:4, peri:1, dif:4, amb:'riachos de água limpa e corrente', nota:'Ninfas aquáticas muito sensíveis à poluição, indicadoras de água de boa qualidade.', coleta:'Procure as ninfas sob pedras em riachos de água corrente e limpa usando uma peneira.', diferencas:'Maior porte entre os plecópteros, com dois cercos longos e visíveis na cauda.' , livro:'Adultos com mandíbulas e maxilas reduzidas; clípeo fundido com a fronte; vestígios de brânquias torácicas junto às coxas; ninfas com brânquias torácicas e cercos mais longos que o abdômen.' },
+    { id:'gripopterygidae', nome:'Moscas-de-pedra-do-sul', sci:'Gripopterygidae', rar:5, peri:1, dif:4, amb:'riachos de mata preservada', nota:'Dependem de riachos bem conservados e sombreados, cada vez mais raros na região.', coleta:'Procure as ninfas sob pedras em riachos de água corrente e limpa usando uma peneira.', diferencas:'Menor porte que Perlidae, associada a riachos ainda mais preservados.' , livro:'Adultos com mandíbulas e maxilas funcionais; clípeo distinto; vestígios de brânquias torácicas ausentes; ninfas com tufo de brânquias anais e cercos mais  curtos que o abdômen.' },
+  ]},
+  { id:'psocodea', nome:'Psocópteros e piolhos', sci:'Psocodea', cor:'#6b5a3a', chaveOrdem:'Corpo pequeno e de tegumento pouco esclerotizado; ordem que reúne os antigos Psocoptera (vida livre, alados ou não) e Phthiraptera (ectoparasitas hematófagos ou pilífagos, ápteros secundários); metamorfose paurometábola.', familias:[
+    { id:'psocidae', nome:'Piolhos-de-livro-e-de-casca', sci:'Psocidae', rar:1, peri:1, dif:1, amb:'dentro de casa, cascas de árvore', nota:'Pequenos insetos que se alimentam de fungos e matéria orgânica em decomposição.', coleta:'Procure em livros, papéis e cascas de árvore com o auxílio de uma lupa; ectoparasitas humanos não devem ser coletados fora de contexto clínico/científico.', diferencas:'Vive livremente sobre casca de árvores e dentro de casas, diferente dos ectoparasitas obrigatórios da família Pediculidae.' , livro:'Asa anterior com máculas alternando bandas marrons e hialinas (translúcidas).' },
+    { id:'liposcelididae', nome:'Piolhos-de-livro-domésticos', sci:'Liposcelididae', rar:1, peri:1, dif:1, amb:'dentro de casa, livros, despensa', nota:'Comuns em ambientes úmidos, alimentando-se de mofo e resíduos orgânicos.', coleta:'Procure em livros, papéis e cascas de árvore com o auxílio de uma lupa; ectoparasitas humanos não devem ser coletados fora de contexto clínico/científico.', diferencas:'Menor porte que Psocidae, associada especificamente a ambientes internos úmidos.' , livro:'Garra pretarsal com pulvilo dobrado próximo à base.' },
+    { id:'ectopsocidae', nome:'Psocópteros-de-folhagem', sci:'Ectopsocidae', rar:3, peri:1, dif:1, amb:'jardim, folhagem', nota:'Vivem sobre folhas, alimentando-se de fungos microscópicos e líquens.', coleta:'Procure em livros, papéis e cascas de árvore com o auxílio de uma lupa; ectoparasitas humanos não devem ser coletados fora de contexto clínico/científico.', diferencas:'Vive sobre folhagem viva, diferente do hábito em superfícies secas de Psocidae.' , livro:'Placa subgenital geralmente com duas protuberâncias distais.' },
+    { id:'pediculidae', nome:'Piolhos-humanos', sci:'Pediculidae', rar:1, peri:2, dif:1, amb:'associado ao corpo humano', nota:'Ectoparasitos que vivem no couro cabeludo ou nas roupas, alimentando-se de sangue.', coleta:'Não recomendamos qualquer coleta amadora; é um ectoparasita humano e seu manuseio deve ficar restrito a contexto clínico.', diferencas:'Ectoparasita obrigatório do couro cabeludo humano, sem vida livre como as demais famílias da ordem.' , livro:'Espiráculos abdominais abrindo-se separadamente, um par em cada segmento.' },
+    { id:'pthiridae', nome:'Piolho-chato', sci:'Pthiridae', rar:2, peri:2, dif:1, amb:'associado ao corpo humano', nota:'Ectoparasito humano taxonomicamente distinto dos piolhos de cabeça.', coleta:'Não recomendamos qualquer coleta amadora; é um ectoparasita humano e seu manuseio deve ficar restrito a contexto clínico.', diferencas:'Corpo mais largo e achatado que Pediculidae, também ectoparasita humano obrigatório.' , livro:'Espiráculo torácico anterior menos desenvolvido que os demais; os três primeiros pares de espiráculos abdominais abrindo-se transversalmente, em um mesmo segmento.' },
+   { id:'thysanoptera', nome:'Tripes', sci:'Thysanoptera', cor:'#7a6b2a', chaveOrdem:'Corpo minúsculo e alongado; asas franjadas por cerdas longas quando presentes; aparelho bucal assimétrico do tipo raspador-sugador; desenvolvimento com neometabolia (pupa não funcional).', familias:[
+    { id:'thripidae', nome:'Tripes-comuns', sci:'Thripidae', rar:1, peri:1, dif:1, amb:'jardim, flores, horta', nota:'Insetos minúsculos e alongados que se alimentam raspando tecido vegetal.', coleta:'Bata a flor ou folhagem suspeita sobre um papel branco e observe com lupa — são pequenos demais para rede convencional.', diferencas:'Alimentam-se raspando tecido vegetal, diferente do hábito predador de Aeolothripidae.', livro:'Segmento abdominal X sempre incompleto ventralmente; fêmea com ovipositor externo serreado; antenômeros III–IV com áreas sensoriais em forma de cone, simples ou bifurcadas (subordem Terebrantia).' },
+    { id:'phlaeothripidae', nome:'Tripes-de-corpo-tubular', sci:'Phlaeothripidae', rar:3, peri:1, dif:1, amb:'folhiço, casca de árvore, fungos', nota:'Corpo com formato tubular, muitas espécies associadas a fungos e madeira em decomposição.', coleta:'Bata a flor ou folhagem suspeita sobre um papel branco e observe com lupa — são pequenos demais para rede convencional.', diferencas:'Corpo tubular, mais alongado que Thripidae, associado a fungos e madeira.', livro:'Segmento abdominal X formando um tubo completamente fechado; fêmea sem ovipositor externo; asas anteriores, quando presentes, sem venação ou cerdas na superfície (subordem Tubulifera).' },
+    { id:'aeolothripidae', nome:'Tripes-predadores', sci:'Aeolothripidae', rar:3, peri:1, dif:1, amb:'jardim, flores', nota:'Diferente da maioria dos tripes, algumas espécies predam outros pequenos artrópodes.', coleta:'Bata a flor ou folhagem suspeita sobre um papel branco e observe com lupa — são pequenos demais para rede convencional.', diferencas:'Algumas espécies predam outros pequenos artrópodes, hábito incomum entre os tripes.' },
+  ]},
+  { id:'siphonaptera', nome:'Pulgas', sci:'Siphonaptera', cor:'#5a3a3a', chaveOrdem:'Ápteros; corpo comprimido lateralmente; pernas posteriores adaptadas ao salto; aparelho bucal picador-sugador; ectoparasitas hematófagos de mamíferos e aves; metamorfose holometábola.', familias:[
+    { id:'pulicidae', nome:'Pulgas-comuns', sci:'Pulicidae', rar:1, peri:2, dif:1, amb:'associadas a cães, gatos, área urbana', nota:'Corpo achatado lateralmente e patas adaptadas para saltos longos.', coleta:'A coleta é feita escovando o pelo do animal hospedeiro sobre uma bandeja clara; evite manuseio direto pelo risco de picadas.', diferencas:'Associada a cães, gatos e ambientes urbanos, diferente do hábito silvestre de Rhopalopsyllidae.', livro:'Coxa posterior com um grupo de pequenas cerdas espiniformes na face interna; tergos torácicos em conjunto mais longos que o primeiro tergo abdominal; fêmeas não penetrantes, com estiletes anais.' },
+    { id:'rhopalopsyllidae', nome:'Pulgas-silvestres', sci:'Rhopalopsyllidae', rar:4, peri:2, dif:2, amb:'associadas a roedores e mamíferos silvestres', nota:'Grupo de pulgas tipicamente neotropical, associado à fauna silvestre.', coleta:'A coleta é feita escovando o pelo do animal hospedeiro sobre uma bandeja clara; evite manuseio direto pelo risco de picadas.', diferencas:'Associada a roedores e mamíferos silvestres; grupo tipicamente neotropical.' },
+    { id:'tungidae', nome:'Bicho-de-pé', sci:'Tungidae', rar:2, peri:3, dif:1, amb:'solo arenoso, praia, restinga', nota:'Fêmea penetra na pele, geralmente nos pés, onde continua se desenvolvendo.', coleta:'Evite contato direto com os pés descalços em solo arenoso; a coleta científica é feita apenas por profissionais, nunca de forma amadora.', diferencas:'Fêmea penetra na pele do hospedeiro, hábito exclusivo entre as pulgas da lista.', livro:'Tergos torácicos em conjunto mais curtos que o primeiro tergo abdominal; sensilas com oito fossetas de cada lado; cerdas antessensoriais ausentes; fêmeas penetrantes/semipenetrantes, sem estiletes anais.' },
+  ]},
+  { id:'mecoptera', nome:'Moscas-escorpião', sci:'Mecoptera', cor:'#4a3a5a', chaveOrdem:'Cabeça prolongada ventralmente em rostro; asas anteriores e posteriores subiguais e estreitas; genitália do macho frequentemente recurvada dorsalmente; metamorfose holometábola.', familias:[
+    { id:'bittacidae', nome:'Moscas-escorpião-penduradas', sci:'Bittacidae', rar:5, peri:1, dif:4, amb:'mata úmida, sub-bosque', nota:'Capturam presas penduradas pelas patas dianteiras em vegetação baixa e úmida.', coleta:'Procure em vegetação baixa e úmida de sub-bosque durante o dia; voo fraco facilita a captura com rede quando avistadas.', diferencas:'Capturam presas penduradas pelas patas dianteiras, diferente do hábito de Panorpidae.', livro:'Tarso com uma garra; ocelo presente; asas delgadas, com menos de 30 veias transversais.' },
+    { id:'meropeidae', nome:'Moscas-escorpião-de-asa-larga', sci:'Meropeidae', rar:5, peri:1, dif:4, amb:'mata, folhagem úmida', nota:'Asas largas com mais de 50 veias transversais; ocelos ausentes, diferente de Bittacidae. É a segunda e última família de Mecoptera com registro confirmado no Brasil.', coleta:'Procure em vegetação baixa e úmida de sub-bosque durante o dia; voo fraco facilita a captura com rede quando avistadas.', diferencas:'Tarsos com duas garras e ocelos ausentes, ao contrário de Bittacidae (tarso com uma garra, ocelo presente); asas proporcionalmente mais largas.', livro:'Tarso com duas garras; ocelo ausente; asas largas, com mais de 50 veias transversais.' },
+  ]},
+  { id:'embioptera', nome:'Embiópteros', sci:'Embioptera', cor:'#4a5a3a', chaveOrdem:'Fêmeas ápteras; machos frequentemente alados, com asas flexíveis; primeiro tarsômero anterior hipertrofiado, sede de glândulas sericígenas; vida em galerias de seda; metamorfose paurometábola.', familias:[
+    { id:'oligotomidae', nome:'Insetos-teia-comuns', sci:'Oligotomidae', rar:4, peri:1, dif:3, amb:'sob casca de árvore, folhiço', nota:'Constroem galerias de seda onde vivem em pequenos grupos, protegidos de predadores.', coleta:'Procure sob casca solta de árvores e pedras, abrindo com cuidado as galerias de seda onde vivem em pequenos grupos.', diferencas:'Mais comumente associada a cascas de árvore que Anisembiidae.', livro:'Machos com veia MA simples; mandíbula robusta, com dois a três dentes incisivos e molares bem desenvolvidos; fêmur posterior sem órgão timpânico.' },
+    { id:'anisembiidae', nome:'Insetos-teia-neotropicais', sci:'Anisembiidae', rar:5, peri:1, dif:3, amb:'folhiço, sob pedras, mata', nota:'Grupo pouco visto, escondido em galerias de seda sob pedras e troncos.', coleta:'Procure sob casca solta de árvores e pedras, abrindo com cuidado as galerias de seda onde vivem em pequenos grupos.', diferencas:'Grupo tipicamente neotropical, associado a folhiço e pedras em vez de casca de árvore.', livro:'Machos com veia MA simples; mandíbula em forma de estilete, com um ou dois dentes incisivos; fêmur posterior com órgão timpânico.' },
+  ]},
+  { id:'zoraptera', nome:'Zorápteros', sci:'Zoraptera', cor:'#3a3a3a', chaveOrdem:'Ordem monofamiliar; polimorfismo com formas aladas e ápteras; corpo pequeno, morfologicamente convergente a Isoptera; metamorfose paurometábola; hábito gregário sob madeira em decomposição.', familias:[
+    { id:'zorotypidae', nome:'Zorápteros', sci:'Zorotypidae', rar:5, peri:1, dif:4, amb:'madeira podre, folhiço úmido de mata', nota:'Insetos minúsculos e raramente avistados, vivendo em pequenas colônias sob madeira em decomposição.', coleta:'Procure em madeira em decomposição bem apodrecida e úmida, quebrando cuidadosamente pedaços de tronco caído.', diferencas:'Tíbia posterior com um único espinho apical ventral e esterno 8 do macho assimétrico, diferente de Spiralizoridae.', livro:'Tíbia posterior com um espinho apical ventral; esterno 8 do macho assimétrico.' },
+    { id:'spiralizoridae', nome:'Zorápteros-de-Spiralizor', sci:'Spiralizoridae', rar:5, peri:1, dif:4, amb:'madeira podre, folhiço úmido de mata', nota:'Família descrita mais recentemente para o gênero Brazilozoros, com registros do Amazonas ao Sul e Sudeste do Brasil (MG, ES, RJ, SP, PR, SC).', coleta:'Procure em madeira em decomposição bem apodrecida e úmida, quebrando cuidadosamente pedaços de tronco caído.', diferencas:'Tíbia posterior com dois ou três espinhos apicais ventrais e esterno 8 do macho simétrico, diferente de Zorotypidae.', livro:'Tíbia posterior com dois ou três espinhos apicais ventrais; esterno 8 do macho simétrico.' },
+  ]},
+  { id:'strepsiptera', nome:'Estrepsípteros', sci:'Strepsiptera', cor:'#8f3a5a', chaveOrdem:'Machos alados com asas anteriores reduzidas a halteres (padrão inverso ao de Diptera) e asas posteriores expandidas; fêmeas neotênicas, ápteras e endoparasitas permanentes do hospedeiro; metamorfose holometábola com hipermetamorfose.', familias:[
+    { id:'stylopidae', nome:'Estrepsípteros-de-abelhas', sci:'Stylopidae', rar:5, peri:1, dif:5, amb:'associados a abelhas e vespas parasitadas', nota:'Fêmeas passam a vida inteira dentro do corpo do inseto hospedeiro, quase nunca vistas livres.', coleta:'Praticamente impossível de coletar livre; procure abelhas, vespas ou cigarrinhas parasitadas (protuberância anormal saindo do abdômen) e apenas observe, sem manusear.', diferencas:'Parasitam abelhas e vespas, diferente do hospedeiro de Halictophagidae.', livro:'Machos com tarsos tetrâmeros; antena com 6 artículos; metatórax com esclerito subalar em forma de colher.' },
+    { id:'halictophagidae', nome:'Estrepsípteros-de-cigarrinhas', sci:'Halictophagidae', rar:5, peri:1, dif:5, amb:'associados a cigarrinhas parasitadas', nota:'Parasitam cigarrinhas, deixando apenas a cabeça do macho adulto visível por pouco tempo.', coleta:'Praticamente impossível de coletar livre; procure abelhas, vespas ou cigarrinhas parasitadas (protuberância anormal saindo do abdômen) e apenas observe, sem manusear.', diferencas:'Parasitam cigarrinhas, diferente do hospedeiro de Stylopidae.', livro:'Machos com tarsos trímeros.' },
+  ]},
+  { id:'megaloptera', nome:'Megalópteros', sci:'Megaloptera', cor:'#2a4a3a', chaveOrdem:'Dois pares de asas membranosas subiguais com venação reticulada; larvas aquáticas predadoras com brânquias traqueais laterais; metamorfose holometábola.', familias:[
+    { id:'corydalidae', nome:'Corydalídeos', sci:'Corydalidae', rar:4, peri:3, dif:4, amb:'próximo a riachos e rios', nota:'Larvas aquáticas predadoras vivem sob pedras; machos adultos têm mandíbulas grandes usadas em disputas.', coleta:'Procure as larvas aquáticas sob pedras em riachos e rios de correnteza; os adultos são atraídos por luz à noite perto da água.', diferencas:'Porte maior (25–75 mm) e três ocelos presentes, diferente de Sialidae.', livro:'25–75 mm de comprimento; três ocelos presentes; tarsômero IV simples (não dilatado).' },
+    { id:'sialidae', nome:'Sialídeos', sci:'Sialidae', rar:4, peri:1, dif:4, amb:'próximo a riachos e rios', nota:'Segunda família de Megaloptera do Brasil, representada pelo gênero Ilyobius (subfamília Sialinae); porte bem menor que Corydalidae.', coleta:'Procure as larvas aquáticas sob pedras em riachos e rios de correnteza; os adultos são atraídos por luz à noite perto da água.', diferencas:'Porte menor (<25 mm), ocelos ausentes e tarsômero IV dilatado e bilobado, diferente de Corydalidae.', livro:'Menos de 25 mm de comprimento; ocelos ausentes; tarsômero IV dilatado e bilobado. No Brasil, representada pelo gênero Ilyobius (subfamília Sialinae).' },
   ]},
 ];
 
@@ -428,27 +697,63 @@ function dotsHtml(valor, cor){
   return html + '</span>';
 }
 
-const imageCache = {};
-async function buscarFoto(sciName){
-  if(imageCache[sciName] !== undefined) return imageCache[sciName];
-  try{
-    const url = 'https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=pageimages&piprop=thumbnail&pithumbsize=400&titles=' + encodeURIComponent(sciName);
-    const res = await fetch(url);
-    const data = await res.json();
-    const pages = data.query && data.query.pages;
-    let src = null;
-    if(pages){
-      const first = Object.values(pages)[0];
-      if(first && first.thumbnail && first.thumbnail.source){
-        src = first.thumbnail.source;
-      }
+const IMG_STORAGE_KEY = 'catalogo-insetos-jp-conde-v1-fotos';
+let fotoFixa = {};
+try{ fotoFixa = JSON.parse(localStorage.getItem(IMG_STORAGE_KEY)) || {}; }catch(e){ fotoFixa = {}; }
+const imageCache = Object.assign({}, fotoFixa);
+
+function salvarFotoFixa(sciName, src){
+  if(!src) return;
+  fotoFixa[sciName] = src;
+  localStorage.setItem(IMG_STORAGE_KEY, JSON.stringify(fotoFixa));
+}
+
+async function fetchWikiThumb(lang, sciName){
+  const url = `https://${lang}.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages&piprop=thumbnail&pithumbsize=500&titles=` + encodeURIComponent(sciName);
+  const res = await fetch(url);
+  const data = await res.json();
+  const pages = data.query && data.query.pages;
+  if(pages){
+    const first = Object.values(pages)[0];
+    if(first && first.thumbnail && first.thumbnail.source){
+      return first.thumbnail.source;
     }
-    imageCache[sciName] = src;
-    return src;
-  }catch(e){
-    imageCache[sciName] = null;
-    return null;
   }
+  return null;
+}
+
+async function fetchCommonsThumb(sciName){
+  const url = 'https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrlimit=1&gsrsearch=' + encodeURIComponent(sciName + ' filetype:bitmap') + '&prop=imageinfo&iiprop=url&iiurlwidth=500';
+  const res = await fetch(url);
+  const data = await res.json();
+  const pages = data.query && data.query.pages;
+  if(pages){
+    const first = Object.values(pages)[0];
+    if(first && first.imageinfo && first.imageinfo[0]){
+      return first.imageinfo[0].thumburl || first.imageinfo[0].url || null;
+    }
+  }
+  return null;
+}
+
+async function buscarFoto(sciName, nomeComum){
+  if(imageCache[sciName] !== undefined) return imageCache[sciName];
+  const tentativas = [
+    () => fetchWikiThumb('en', sciName),
+    () => fetchWikiThumb('pt', sciName),
+    () => fetchCommonsThumb(sciName),
+    () => fetchCommonsThumb(nomeComum + ' insect'),
+  ];
+  let src = null;
+  for(const tentativa of tentativas){
+    try{
+      src = await tentativa();
+      if(src) break;
+    }catch(e){ /* tenta a próxima fonte */ }
+  }
+  imageCache[sciName] = src;
+  salvarFotoFixa(sciName, src);
+  return src;
 }
 
 function renderOrders(){
@@ -465,8 +770,8 @@ function renderOrders(){
     header.innerHTML = `
       <svg class="order-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M5 2L12 8L5 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <div>
-        <p class="order-name">${ordem.nome}</p>
         <p class="order-sci">${ordem.sci}</p>
+        <p class="order-name">${ordem.nome}</p>
       </div>
       <span class="order-count sans">${contarCapturadasOrdem(ordem)}/${ordem.familias.length}<br><small class="order-points">${pontosOrdemCapturada(ordem)} pts</small></span>
     `;
@@ -487,12 +792,15 @@ function renderOrders(){
       card.dataset.searchBlob = (fam.nome + ' ' + fam.sci + ' ' + ordem.nome).toLowerCase();
 
       card.innerHTML = `
-        <div class="photo-frame" data-sci="${fam.sci}">
-          <span class="photo-fallback">🪲</span>
+        <div class="photo-frame" data-sci="${fam.sci}" data-common="${fam.nome.replace(/"/g,'&quot;')}">
+          <div class="photo-fallback">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--order-color)" stroke-width="1.4"><ellipse cx="12" cy="13" rx="5" ry="7"/><circle cx="12" cy="5" r="2.4"/><path d="M8 8L3 5M16 8l5-3M7 12H2M17 12h5M8 17l-4 4M16 17l4 4"/></svg>
+            <span class="photo-fallback-label sans">Registro fotográfico indisponível</span>
+          </div>
         </div>
         <div class="card-body">
-          <p class="family-common">${fam.nome}</p>
           <p class="family-sci">${fam.sci}</p>
+          <p class="family-common">${fam.nome}</p>
           <span class="family-env sans">${fam.amb}</span>
           <p class="family-note">${fam.nota}</p>
           <div class="stat-row sans">
@@ -500,14 +808,58 @@ function renderOrders(){
             <div class="stat-line"><span class="stat-label">Periculosidade</span>${dotsHtml(fam.peri, '#a13f2e')}</div>
             <div class="stat-line"><span class="stat-label">Dificuldade</span>${dotsHtml(fam.dif, '#2e4a55')}</div>
           </div>
-          <span class="points-badge">vale ${pontosFamilia(fam)} pts</span>
+          <span class="points-badge">${pontosFamilia(fam)} pontos</span>
           <div class="catch-row">
             <input type="checkbox" class="catch-toggle" id="chk-${fam.id}" ${progresso[fam.id] ? 'checked' : ''}>
-            <label class="catch-label sans" for="chk-${fam.id}">Já capturei / fotografei</label>
+            <label class="catch-label sans" for="chk-${fam.id}">Espécime coletado/registrado</label>
+          </div>
+          <button class="details-toggle sans" type="button">▾ Ficha taxonômica</button>
+          <div class="details-panel" hidden>
+            <div class="details-tabbar">
+              <button type="button" class="details-tab active sans" data-tab="info">Informações</button>
+              <button type="button" class="details-tab sans" data-tab="coleta">Coleta</button>
+              <button type="button" class="details-tab sans" data-tab="dif">Diferenças</button>
+              <button type="button" class="details-tab sans" data-tab="chave">Chave</button>
+            </div>
+            <div class="details-content" data-tab-content="info">${fam.amb ? 'Ambiente: ' + fam.amb + '. ' : ''}${fam.nota}</div>
+            <div class="details-content" data-tab-content="coleta" hidden>${fam.coleta}</div>
+            <div class="details-content" data-tab-content="dif" hidden>${fam.diferencas}</div>
+            <div class="details-content details-chave" data-tab-content="chave" hidden>
+              <div class="chave-img"><img src="" alt="${fam.sci}" data-chave-img></div>
+              <p class="chave-label sans">Diagnose de ordem (${ordem.sci})</p>
+              <p>${ordem.chaveOrdem || 'Caracteres diagnósticos de ordem ainda não cadastrados.'}</p>
+              <p class="chave-label sans">Caráter(es) diagnóstico(s) — separação de ${fam.sci} dos demais táxons afins</p>
+              <p>${fam.livro || fam.diferencas}</p>
+              ${fam.livro
+                ? '<p class="chave-fonte sans">Fonte: Rafael, J.A.; Melo, G.A.R.; Carvalho, C.J.B.; Casari, S.A. &amp; Constantino, R. (eds) 2024. <em>Insetos do Brasil: Diversidade e Taxonomia</em>. 2ª ed. Manaus, Editora INPA. (conteúdo parafraseado, não citação literal)</p>'
+                : '<p class="chave-disclaimer sans">⚠ Diagnose ainda não conferida em Rafael et al. (2024) — baseada em morfologia geral consolidada na literatura entomológica. Extração desse táxon específico no livro está pendente.</p>'
+              }
+            </div>
           </div>
         </div>
-        ${progresso[fam.id] ? '<span class="stamp">CAPTURADO</span>' : ''}
+        ${progresso[fam.id] ? '<span class="stamp">REGISTRADO</span>' : ''}
       `;
+
+      const detailsToggle = card.querySelector('.details-toggle');
+      const detailsPanel = card.querySelector('.details-panel');
+      detailsToggle.addEventListener('click', ()=>{
+        const aberto = !detailsPanel.hidden;
+        detailsPanel.hidden = aberto;
+        detailsToggle.textContent = aberto ? '▾ Ficha taxonômica' : '▴ Recolher';
+      });
+      card.querySelectorAll('.details-tab').forEach(tabBtn=>{
+        tabBtn.addEventListener('click', ()=>{
+          card.querySelectorAll('.details-tab').forEach(b=>b.classList.remove('active'));
+          tabBtn.classList.add('active');
+          const alvo = tabBtn.dataset.tab;
+          card.querySelectorAll('.details-content').forEach(c=>{
+            c.hidden = c.dataset.tabContent !== alvo;
+          });
+          if(alvo === 'chave'){
+            carregarImagemChave(card, fam);
+          }
+        });
+      });
 
       const checkbox = card.querySelector('.catch-toggle');
       checkbox.addEventListener('change', ()=>{
@@ -518,7 +870,7 @@ function renderOrders(){
         if(checkbox.checked && !stamp){
           stamp = document.createElement('span');
           stamp.className = 'stamp';
-          stamp.textContent = 'CAPTURADO';
+          stamp.textContent = 'REGISTRADO';
           card.appendChild(stamp);
         } else if(!checkbox.checked && stamp){
           stamp.remove();
@@ -539,19 +891,52 @@ function renderOrders(){
 
 function carregarFotosVisiveis(section){
   const frames = section.querySelectorAll('.photo-frame:not([data-loaded])');
-  frames.forEach(async frame=>{
-    frame.setAttribute('data-loaded','1');
-    const sci = frame.dataset.sci;
-    const src = await buscarFoto(sci);
-    if(src){
-      const img = document.createElement('img');
-      img.src = src;
-      img.alt = sci;
-      img.loading = 'lazy';
-      frame.innerHTML = '';
-      frame.appendChild(img);
-    }
+  frames.forEach(frame => carregarUmaFoto(frame));
+}
+
+async function carregarUmaFoto(frame){
+  frame.setAttribute('data-loaded','1');
+  const sci = frame.dataset.sci;
+  const common = frame.dataset.common || '';
+  const src = await buscarFoto(sci, common);
+  if(src){
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = sci;
+    img.loading = 'lazy';
+    img.onerror = () => { frame.removeAttribute('data-loaded'); mostrarFalha(frame); };
+    frame.innerHTML = '';
+    frame.appendChild(img);
+  } else {
+    mostrarFalha(frame);
+  }
+}
+
+function mostrarFalha(frame){
+  frame.innerHTML = `
+    <div class="photo-fallback">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--order-color)" stroke-width="1.4"><ellipse cx="12" cy="13" rx="5" ry="7"/><circle cx="12" cy="5" r="2.4"/><path d="M8 8L3 5M16 8l5-3M7 12H2M17 12h5M8 17l-4 4M16 17l4 4"/></svg>
+      <span class="photo-fallback-label sans">Registro fotográfico indisponível</span>
+    </div>
+    <span class="photo-retry sans">Repetir consulta</span>
+  `;
+  frame.querySelector('.photo-retry').addEventListener('click', (e)=>{
+    e.stopPropagation();
+    delete imageCache[frame.dataset.sci];
+    frame.removeAttribute('data-loaded');
+    carregarUmaFoto(frame);
   });
+}
+
+async function carregarImagemChave(card, fam){
+  const container = card.querySelector('.chave-img');
+  if(!container || container.dataset.loaded) return;
+  container.dataset.loaded = '1';
+  const img = container.querySelector('img');
+  const src = await buscarFoto(fam.sci, fam.nome);
+  if(src){
+    img.src = src;
+  }
 }
 
 function aplicarFiltros(){
@@ -582,8 +967,68 @@ function aplicarFiltros(){
 document.getElementById('searchInput').addEventListener('input', aplicarFiltros);
 document.getElementById('filterSelect').addEventListener('change', aplicarFiltros);
 
+document.getElementById('fetchAllBtn').addEventListener('click', montarTodasAsFotos);
+
+async function montarTodasAsFotos(){
+  const btn = document.getElementById('fetchAllBtn');
+  const progressEl = document.getElementById('fetchAllProgress');
+  btn.disabled = true;
+  progressEl.style.display = 'block';
+
+  const pendentes = todasFamilias.filter(f => !fotoFixa[f.sci]);
+  const total = pendentes.length;
+  if(total === 0){
+    progressEl.textContent = 'Registro fotográfico completo para todos os táxons.';
+    btn.disabled = false;
+    setTimeout(()=>{ progressEl.style.display='none'; }, 3000);
+    return;
+  }
+
+  let feitas = 0;
+  for(const f of pendentes){
+    progressEl.textContent = `Consultando acervo… ${feitas + 1}/${total} (${f.sci})`;
+    await buscarFoto(f.sci, f.nome);
+    feitas++;
+    // pequena pausa para não sobrecarregar as APIs
+    await new Promise(r => setTimeout(r, 120));
+  }
+
+  progressEl.textContent = `Concluído: ${feitas} registros fotográficos recuperados e persistidos localmente.`;
+  btn.disabled = false;
+  btn.textContent = 'Atualizar registros fotográficos pendentes';
+
+  // recarrega as fotos já visíveis na tela com o que acabou de ser cacheado
+  document.querySelectorAll('.order-section.open').forEach(section=>{
+    section.querySelectorAll('.photo-frame').forEach(frame=>{
+      frame.removeAttribute('data-loaded');
+    });
+    carregarFotosVisiveis(section);
+  });
+
+  setTimeout(()=>{ progressEl.style.display='none'; }, 5000);
+}
+
 renderOrders();
 atualizarProgressoGeral();
+
+async function testarConexao(){
+  const banner = document.getElementById('networkBanner');
+  try{
+    const res = await fetch('https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&titles=Nymphalidae&prop=pageimages&piprop=thumbnail&pithumbsize=50');
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    await res.json();
+    // conexão ok, nada a avisar
+  }catch(err){
+    banner.style.display = 'block';
+    banner.innerHTML = `
+      ⚠️ Este visualizador parece estar bloqueando o acesso à internet, então as fotos não conseguem ser buscadas aqui
+      (erro técnico: <code>${(err && err.message) || err}</code>).<br>
+      Tente abrir este arquivo direto num navegador (Chrome, por exemplo) em vez do visualizador do app — lá as fotos devem carregar normalmente.
+    `;
+  }
+}
+testarConexao();
+
 // abre a primeira ordem e carrega as fotos dela de início
 const primeira = document.querySelector('.order-section');
 if(primeira){
